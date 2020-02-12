@@ -58,6 +58,8 @@ $ cf feature-flags | grep docker
 diego_docker                                  enabled <--
 ```
 
+Just cf push!
+
 ```
 cf push code-server -o making/code-server -m 2g -k 2g --random-route
 ```
