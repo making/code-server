@@ -80,11 +80,11 @@ The way to deploy a code server is as same as Pivotal Application Service above.
 However in PWS the load balancer via `80`/`443` port does not support WebSocket, you have to use `8443` port instead.
 
 So go to `https://code-server-<random-words>.cfapps.io:8443/login`.
-After login with the correct password, you'll see `ERR_CONNECTION_RESET` as you are redirect to HTTP (not HTTPS).
+After login with the correct password, you'll see `ERR_CONNECTION_RESET` as you are redirected to HTTP (not HTTPS).
 
 ![image](https://user-images.githubusercontent.com/106908/74356529-d3965500-4e01-11ea-8584-6fe7b11cbedc.png)
 
-Change `http` to `https` in the url bar of the browser, then you'll see the welcome page :)
+Change `http` to `https` in the url bar of the browser directly, then you'll see the welcome page :)
 
 ![image](https://user-images.githubusercontent.com/106908/74356690-1bb57780-4e02-11ea-8e63-93100426e189.png)
 
