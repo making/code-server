@@ -7,23 +7,6 @@ RUN sudo apt-get update && sudo apt-get install --no-install-recommends -y \
     bsdtar \
     && sudo rm -rf /var/lib/apt/lists/*
 
-# AdoptOpenJDK
-RUN wget -q -O OpenJDK.tar.gz https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10/OpenJDK11U-jdk_x64_linux_hotspot_11.0.6_10.tar.gz && \
-    tar xzf OpenJDK.tar.gz && \
-    sudo mv jdk-* /opt/ && \
-    rm -f OpenJDK.tar.gz && \
-    echo "export JAVA_HOME=$(dirname /opt/jdk-*/bin/)" | sudo tee -a /home/coder/.bashrc > /dev/null && \
-    echo 'export PATH=${PATH}:${JAVA_HOME}/bin' | sudo tee -a /home/coder/.bashrc > /dev/null
-
-# Maven
-ENV MAVEN_VERSION=3.6.3
-RUN wget -q -O maven.tar.gz http://ftp.riken.jp/net/apache/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
-    tar xzf maven.tar.gz && \
-    sudo mv apache-maven-* /opt/ && \
-    rm -f maven.tar.gz && \
-    echo "export MAVEN_HOME=/opt/apache-maven-${MAVEN_VERSION}" | sudo tee -a /home/coder/.bashrc > /dev/null && \
-    echo 'export PATH=${PATH}:${MAVEN_HOME}/bin' | sudo tee -a /home/coder/.bashrc > /dev/null
-
 # Visual Studio Code Extentions
 ENV VSCODE_USER /home/coder/.local/share/code-server/User
 ENV VSCODE_EXTENSIONS /home/coder/.local/share/code-server/extensions
@@ -57,6 +40,23 @@ RUN mkdir -p ${VSCODE_EXTENSIONS}/concourse \
 
 RUN mkdir -p ${VSCODE_EXTENSIONS}/yaml \
     && curl -JLs https://marketplace.visualstudio.com/_apis/public/gallery/publishers/redhat/vsextensions/vscode-yaml/latest/vspackage | bsdtar --strip-components=1 -xf - -C ${VSCODE_EXTENSIONS}/yaml extension
+
+# AdoptOpenJDK
+RUN wget -q -O OpenJDK.tar.gz https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.6%2B10/OpenJDK11U-jdk_x64_linux_hotspot_11.0.6_10.tar.gz && \
+    tar xzf OpenJDK.tar.gz && \
+    sudo mv jdk-* /opt/ && \
+    rm -f OpenJDK.tar.gz && \
+    echo "export JAVA_HOME=$(dirname /opt/jdk-*/bin/)" | sudo tee -a /home/coder/.bashrc > /dev/null && \
+    echo 'export PATH=${PATH}:${JAVA_HOME}/bin' | sudo tee -a /home/coder/.bashrc > /dev/null
+
+# Maven
+ENV MAVEN_VERSION=3.6.3
+RUN wget -q -O maven.tar.gz http://ftp.riken.jp/net/apache/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
+    tar xzf maven.tar.gz && \
+    sudo mv apache-maven-* /opt/ && \
+    rm -f maven.tar.gz && \
+    echo "export MAVEN_HOME=/opt/apache-maven-${MAVEN_VERSION}" | sudo tee -a /home/coder/.bashrc > /dev/null && \
+    echo 'export PATH=${PATH}:${MAVEN_HOME}/bin' | sudo tee -a /home/coder/.bashrc > /dev/null
 
 # CF CLI
 ENV CF_CLI_VERSION 6.49.0
