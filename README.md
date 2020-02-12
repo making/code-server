@@ -29,7 +29,6 @@ and following extensions
 
 ![image](https://user-images.githubusercontent.com/106908/74355988-f7a56680-4e00-11ea-8e6d-c999e7c30cb9.png)
 ![image](https://user-images.githubusercontent.com/106908/74356021-068c1900-4e01-11ea-88f7-2adfbab723d0.png)
-![image](https://user-images.githubusercontent.com/106908/74356295-76020880-4e01-11ea-92e3-1ead870559ad.png)
 
 Good for an instant handson-lab environment
 
