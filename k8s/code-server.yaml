@@ -148,9 +148,6 @@ spec:
         - mountPath: /home/coder/workspace
           name: code-server-storage
           subPath: workspace
-        - mountPath: /home/coder/.local/share/code-server/User
-          name: code-server-storage
-          subPath: code-server-user
         - mountPath: /home/coder/.m2
           name: code-server-storage
           subPath: m2
