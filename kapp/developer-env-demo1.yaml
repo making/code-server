@@ -1,0 +1,40 @@
+apiVersion: kappctrl.k14s.io/v1alpha1
+kind: App
+metadata:
+  name: code-server-demo1
+  namespace: developer-env
+spec:
+  serviceAccountName: kapp-sa
+  fetch:
+  - git:
+      url: https://github.com/making/code-server
+      ref: origin/master
+      subPath: k8s
+  template:
+  - ytt:
+      inline:
+        pathsFrom:
+        - secretRef:
+            name: developer-env-demo1-values
+  deploy:
+  - kapp:
+      rawOptions:
+      - --wait-timeout=5m
+      - --diff-changes=true
+      - --diff-mask=false
+      inspect:
+        rawOptions:
+        - --tree=true    
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: developer-env-demo1-values
+  namespace: developer-env
+stringData:
+  values.yaml: |
+    #@data/values
+    #@overlay/match-child-defaults missing_ok=True
+    ---
+    namespace: developer-env
+    suffix: demo1   

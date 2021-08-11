@@ -1,0 +1,9 @@
+#@data/values
+#@overlay/match-child-defaults missing_ok=True
+---
+namespace: demo
+suffix:
+app_image: ghcr.io/making/code-server:latest
+external_url_format: https://coder-server-{}.localhost.ik.am
+storage_size: 10Gi
+create_namespace: true

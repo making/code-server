@@ -1,0 +1,166 @@
+#@ load("@ytt:data", "data")
+#@ namespace = data.values.namespace + "-" + data.values.suffix if data.values.suffix else data.values.namespace
+#@ hostname = data.values.external_url_format.format(data.values.suffix).replace("http://","").replace("https://","")
+
+#@ if data.values.create_namespace :
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: #@ namespace
+#@ end
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: code-server
+ namespace: #@ namespace
+spec:
+ ports:
+ - port: 8080
+   name: http
+   protocol: TCP
+ selector:
+   app: code-server
+ type: ClusterIP
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: code-server-selfsigned-issuer
+  namespace: #@ namespace
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: code-server-ca
+  namespace: #@ namespace
+spec:
+  commonName: code-server-ca
+  isCA: true
+  issuerRef:
+    kind: Issuer
+    name: code-server-selfsigned-issuer
+  secretName: code-server-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: code-server-ca-issuer
+  namespace: #@ namespace
+spec:
+  ca:
+    secretName: code-server-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: code-server-tls
+  namespace: #@ namespace
+spec:
+  dnsNames:
+  - #@ hostname
+  - #@ "code-server.{}.svc.cluster.local".format(namespace)
+  - #@ "code-server.{}".format(namespace)
+  - 127.0.0.1
+  - localhost
+  issuerRef:
+    kind: Issuer
+    name: code-server-ca-issuer
+  secretName: code-server-tls
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: code-server
+  namespace: #@ namespace
+spec:
+  virtualhost:
+    fqdn: #@ hostname
+    tls:
+      secretName: code-server-tls
+  routes:
+  - conditions:
+    - prefix: /
+    enableWebsockets: true
+    services:
+    - name: code-server
+      port: 8080
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: code-store
+  namespace: #@ namespace
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: #@ data.values.storage_size
+---
+apiVersion: secretgen.k14s.io/v1alpha1
+kind: Password
+metadata:
+  name: code-server-password
+  namespace: #@ namespace
+spec:
+  secretTemplate:
+    type: Opaque
+    stringData:
+      password: $(value)
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: code-server
+  name: code-server
+  namespace: #@ namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: code-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: code-server
+    spec:
+      containers:
+      - image: #@ data.values.app_image
+        imagePullPolicy: Always
+        name: code-server
+        env:
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: code-server-password
+              key: password
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /home/coder/workspace
+          name: code-server-storage
+          subPath: workspace
+        - mountPath: /home/coder/.m2
+          name: code-server-storage
+          subPath: m2
+        - mountPath: /home/coder/.sts4
+          name: code-server-storage
+          subPath: sts4
+        - mountPath: /home/coder/.tooling
+          name: code-server-storage
+          subPath: tooling
+        - mountPath: /home/coder/.vscode
+          name: code-server-storage
+          subPath: vscode
+      volumes:
+      - name: code-server-storage
+        persistentVolumeClaim:
+          claimName: code-store
