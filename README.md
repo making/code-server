@@ -13,6 +13,8 @@ docker run \
 ```
 
 
+## Deploy on kubernetes
+
 ```
 curl -sL https://github.com/projectcontour/contour/raw/main/examples/kind/kind-expose-port.yaml > kind-expose-port.yaml
 kind create cluster --config kind-expose-port.yaml 
@@ -29,4 +31,19 @@ kubectl apply -f https://github.com/vmware-tanzu/carvel-secretgen-controller/rel
 kubectl apply -f kapp/namespace-role.yaml
 kubectl apply -f kapp/developer-env-demo1.yaml
 kubectl apply -f kapp/developer-env-demo2.yaml
+```
+
+
+```
+$ kubectl get httpproxy -A
+NAMESPACE             NAME          FQDN                                 TLS SECRET        STATUS   STATUS DESCRIPTION
+developer-env-demo1   code-server   coder-server-demo1.localhost.ik.am   code-server-tls   valid    Valid HTTPProxy
+developer-env-demo2   code-server   coder-server-demo2.localhost.ik.am   code-server-tls   valid    Valid HTTPProxy
+```
+
+```
+$ kubectl get secret -n developer-env-demo1 code-server-password -otemplate='{{.data.password | base64decode}}'
+gjknfacl031ndksztukfuxv916exbbjbhdvryaud
+$ kubectl get secret -n developer-env-demo2 code-server-password -otemplate='{{.data.password | base64decode}}'
+k1rhx2sflv9oohzhaemubdoie6emiuao65kqd962
 ```
