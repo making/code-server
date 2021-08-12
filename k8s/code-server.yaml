@@ -1,8 +1,8 @@
 #@ load("@ytt:data", "data")
 #@ namespace = data.values.namespace + "-" + data.values.suffix if data.values.suffix else data.values.namespace
-#@ hostname = data.values.external_url_format.format(data.values.suffix).replace("http://","").replace("https://","")
+#@ hostname = data.values.code_server.external_url_format.format(data.values.suffix).replace("http://","").replace("https://","")
 
-#@ if data.values.create_namespace :
+#@ if data.values.code_server.create_namespace :
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -98,7 +98,7 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: #@ data.values.storage_size
+      storage: #@ data.values.code_server.storage_size
 ---
 apiVersion: secretgen.k14s.io/v1alpha1
 kind: Password
@@ -131,7 +131,7 @@ spec:
         app: code-server
     spec:
       containers:
-      - image: #@ data.values.app_image
+      - image: #@ data.values.code_server.app_image
         imagePullPolicy: Always
         name: code-server
         env:
