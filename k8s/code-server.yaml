@@ -1,6 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ namespace = data.values.namespace + "-" + data.values.suffix if data.values.suffix else data.values.namespace
-#@ hostname = data.values.code_server.external_url_format.format(data.values.suffix).replace("http://","").replace("https://","")
+#@ hostname = data.values.code_server.external_url_format.format(data.values.suffix).replace("http://","").replace("https://","").replace("-None","")
 
 #@ if data.values.code_server.create_namespace :
 apiVersion: v1
@@ -16,7 +16,7 @@ metadata:
  namespace: #@ namespace
 spec:
  ports:
- - port: 8080
+ - port: 3080
    name: http
    protocol: TCP
  selector:
@@ -86,7 +86,7 @@ spec:
     enableWebsockets: true
     services:
     - name: code-server
-      port: 8080
+      port: 3080
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -135,13 +135,15 @@ spec:
         imagePullPolicy: Always
         name: code-server
         env:
+        - name: PORT
+          value: 3080
         - name: PASSWORD
           valueFrom:
             secretKeyRef:
               name: code-server-password
               key: password
         ports:
-        - containerPort: 8080
+        - containerPort: 3080
           name: http
           protocol: TCP
         volumeMounts:
