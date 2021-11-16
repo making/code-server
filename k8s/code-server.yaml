@@ -136,7 +136,7 @@ spec:
         name: code-server
         env:
         - name: PORT
-          value: 3080
+          value: "3080"
         - name: PASSWORD
           valueFrom:
             secretKeyRef:
