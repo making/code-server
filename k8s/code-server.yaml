@@ -162,15 +162,6 @@ spec:
         - mountPath: /home/coder/.m2
           name: code-server-storage
           subPath: m2
-        - mountPath: /home/coder/.sts4
-          name: code-server-storage
-          subPath: sts4
-        - mountPath: /home/coder/.tooling
-          name: code-server-storage
-          subPath: tooling
-        - mountPath: /home/coder/.vscode
-          name: code-server-storage
-          subPath: vscode
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
