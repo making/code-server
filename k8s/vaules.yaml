@@ -5,6 +5,7 @@ namespace: demo
 suffix:
 code_server:
   app_image: ghcr.io/making/code-server:latest
+  change_own_image: ghcr.io/making/busybox:latest
   external_url_format: https://coder-server-{}.localhost.ik.am
   storage_size: 10Gi
   create_namespace: true

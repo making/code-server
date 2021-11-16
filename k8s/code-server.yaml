@@ -130,6 +130,15 @@ spec:
       labels:
         app: code-server
     spec:
+      initContainers:
+      - name: change-own
+        image: #@ data.values.code_server.change_own_image
+        command: ["/bin/chown","-R","1000:1000","/home/coder"]
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /home/coder
+          name: code-server-storage
       containers:
       - image: #@ data.values.code_server.app_image
         imagePullPolicy: Always
