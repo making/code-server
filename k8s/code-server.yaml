@@ -162,6 +162,10 @@ spec:
         - mountPath: /home/coder/.vscode
           name: code-server-storage
           subPath: vscode
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       volumes:
       - name: code-server-storage
         persistentVolumeClaim:
