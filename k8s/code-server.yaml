@@ -137,7 +137,7 @@ spec:
         app: code-server
     spec:
       initContainers:
-      - name: copy-extensions
+      - name: copy-files
         image: #@ data.values.code_server.app_image
         command:
         - bash
@@ -147,6 +147,14 @@ spec:
             mkdir -p /var/coder/.local/share/code-server
             mv /home/coder/.local/share/code-server/extensions /var/coder/.local/share/code-server/
           fi
+          if [ ! -f /var/coder/.local/share/code-server/User ]; then
+            mkdir -p /var/coder/.local/share/code-server/User
+            cp /home/coder/.local/share/code-server/User/settings.json /var/coder/.local/share/code-server/User/
+          fi
+          if [ ! -f /var/coder/.bashrc ]; then
+            cp /home/coder/.bashrc /var/coder/
+          fi
+          rm -rf /var/coder/lost+found
         securityContext:
           runAsUser: 0
         volumeMounts:
