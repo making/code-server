@@ -137,22 +137,6 @@ spec:
         app: code-server
     spec:
       initContainers:
-      - name: change-own
-        image: #@ data.values.code_server.change_own_image
-        command: [ "/bin/chown","-R","1000:1000","/home/coder" ]
-        securityContext:
-          runAsUser: 0
-        volumeMounts:
-        - mountPath: /home/coder
-          name: code-server-storage
-      - name: change-own
-        image: #@ data.values.code_server.change_own_image
-        command: [ "/bin/chown","-R","1000:1000","/home/coder" ]
-        securityContext:
-          runAsUser: 0
-        volumeMounts:
-        - mountPath: /home/coder
-          name: code-server-storage
       - name: copy-extensions
         image: #@ data.values.code_server.app_image
         command:
@@ -167,6 +151,14 @@ spec:
           runAsUser: 0
         volumeMounts:
         - mountPath: /var/coder
+          name: code-server-storage
+      - name: change-own
+        image: #@ data.values.code_server.change_own_image
+        command: [ "/bin/chown","-R","1000:1000","/home/coder" ]
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /home/coder
           name: code-server-storage
       containers:
       - name: code-server
