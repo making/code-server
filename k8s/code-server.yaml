@@ -156,12 +156,8 @@ spec:
           name: http
           protocol: TCP
         volumeMounts:
-        - mountPath: /home/coder/workspace
+        - mountPath: /home/coder
           name: code-server-storage
-          subPath: workspace
-        - mountPath: /home/coder/.m2
-          name: code-server-storage
-          subPath: m2
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
