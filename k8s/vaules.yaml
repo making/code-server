@@ -9,3 +9,4 @@ code_server:
   external_url_format: https://coder-server-{}.localhost.ik.am
   storage_size: 10Gi
   create_namespace: true
+  ingress_class: 

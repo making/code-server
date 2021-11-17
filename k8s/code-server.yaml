@@ -75,6 +75,9 @@ kind: HTTPProxy
 metadata:
   name: code-server
   namespace: #@ namespace
+  labels:
+    #@ if/end data.values.code_server.ingress_class:
+    projectcontour.io/ingress.class: #@ data.values.code_server.ingress_class 
 spec:
   virtualhost:
     fqdn: #@ hostname
