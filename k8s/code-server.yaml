@@ -12,16 +12,16 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
- name: code-server
- namespace: #@ namespace
+  name: code-server
+  namespace: #@ namespace
 spec:
- ports:
- - port: 3080
-   name: http
-   protocol: TCP
- selector:
-   app: code-server
- type: ClusterIP
+  ports:
+  - port: 3080
+    name: http
+    protocol: TCP
+  selector:
+    app: code-server
+  type: ClusterIP
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer
@@ -29,7 +29,7 @@ metadata:
   name: code-server-selfsigned-issuer
   namespace: #@ namespace
 spec:
-  selfSigned: {}
+  selfSigned: { }
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -139,7 +139,7 @@ spec:
       initContainers:
       - name: change-own
         image: #@ data.values.code_server.change_own_image
-        command: ["/bin/chown","-R","1000:1000","/home/coder"]
+        command: [ "/bin/chown","-R","1000:1000","/home/coder" ]
         securityContext:
           runAsUser: 0
         volumeMounts:
