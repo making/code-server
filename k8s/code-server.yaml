@@ -141,7 +141,7 @@ spec:
         image: #@ data.values.code_server.app_image
         command:
         - bash
-        - -ex
+        - -cex
         - |
           if [ ! -d /var/coder/.local/share/code-server/extensions ]; then
             mkdir -p /var/coder/.local/share/code-server
