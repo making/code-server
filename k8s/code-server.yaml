@@ -145,10 +145,33 @@ spec:
         volumeMounts:
         - mountPath: /home/coder
           name: code-server-storage
+      - name: change-own
+        image: #@ data.values.code_server.change_own_image
+        command: [ "/bin/chown","-R","1000:1000","/home/coder" ]
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /home/coder
+          name: code-server-storage
+      - name: copy-extensions
+        image: #@ data.values.code_server.app_image
+        command:
+        - bash
+        - -ex
+        - |
+          if [ ! -d /var/coder/.local/share/code-server/extensions ]; then
+            mkdir -p /var/coder/.local/share/code-server
+            mv /home/coder/.local/share/code-server/extensions /var/coder/.local/share/code-server/
+          fi
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - mountPath: /var/coder
+          name: code-server-storage
       containers:
-      - image: #@ data.values.code_server.app_image
+      - name: code-server
+        image: #@ data.values.code_server.app_image
         imagePullPolicy: Always
-        name: code-server
         env:
         - name: PORT
           value: "3080"
@@ -162,12 +185,8 @@ spec:
           name: http
           protocol: TCP
         volumeMounts:
-        - mountPath: /home/coder/workspace
+        - mountPath: /home/coder
           name: code-server-storage
-          subPath: workspace
-        - mountPath: /home/coder/.m2
-          name: code-server-storage
-          subPath: m2
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
