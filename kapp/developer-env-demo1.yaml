@@ -26,7 +26,7 @@ spec:
       - --diff-mask=false
       inspect:
         rawOptions:
-        - --tree=true    
+        - --tree=true
 ---
 apiVersion: v1
 kind: Secret
