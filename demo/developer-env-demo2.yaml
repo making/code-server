@@ -12,30 +12,6 @@ spec:
   values:
   - secretRef:
       name: developer-env-demo1-values
-spec:
-  serviceAccountName: kapp-sa
-  fetch:
-  - imgpkgBundle:
-      image: ghcr.io/making/code-server-bundle
-  template:
-  - ytt:
-      inline:
-        pathsFrom:
-        - secretRef:
-            name: developer-env-demo2-values
-  - kbld:
-      paths:
-      - "-"
-      - ".imgpkg/images.yml"
-  deploy:
-  - kapp:
-      rawOptions:
-      - --wait-timeout=5m
-      - --diff-changes=true
-      - --diff-mask=false
-      inspect:
-        rawOptions:
-        - --tree=true
 ---
 apiVersion: v1
 kind: Secret
