@@ -38,7 +38,16 @@ kubectl apply -f https://github.com/vmware-tanzu/carvel-kapp-controller/releases
 kubectl apply -f https://github.com/vmware-tanzu/carvel-secretgen-controller/releases/download/v0.7.1/release.yml
 ```
 
-### Install via kubectl
+### Quick Install
+
+```
+ytt -f config/code-server.yaml -f config/vaules.yaml -v namespace=developer-env -v suffix=demo1 | kubectl apply -f
+ytt -f config/code-server.yaml -f config/vaules.yaml -v namespace=developer-env -v suffix=demo2 | kubectl apply -f
+```
+
+### Install using Carvel Package
+
+#### Install via kubectl
 
 ```
 kubectl apply -f demo/namespace-role.yaml
@@ -47,7 +56,7 @@ kubectl apply -f demo/developer-env-demo1.yaml
 kubectl apply -f demo/developer-env-demo2.yaml
 ```
 
-### Install via tanzu cli
+#### Install via tanzu cli
 
 ```
 tanzu package repository add making-pkg \
