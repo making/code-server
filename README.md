@@ -15,7 +15,7 @@ docker run \
 ```
 
 
-## Deploy on kubernetes
+## Install Code Server on kubernetes
 
 ```
 curl -sL https://github.com/projectcontour/contour/raw/main/examples/kind/kind-expose-port.yaml > kind-expose-port.yaml
@@ -27,15 +27,58 @@ kubectl apply -f https://projectcontour.io/quickstart/contour.yaml
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml
 kubectl apply -f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/download/v0.30.0/release.yml
 kubectl apply -f https://github.com/vmware-tanzu/carvel-secretgen-controller/releases/download/v0.7.1/release.yml
+kubectl apply -f kapp/namespace-role.yaml
 ```
 
+### Install via kubectl
+
 ```
-kubectl apply -f kapp/namespace-role.yaml
 kubectl apply -f kapp/package-repository.yaml
 kubectl apply -f kapp/developer-env-demo1.yaml
 kubectl apply -f kapp/developer-env-demo2.yaml
 ```
 
+### Install via tanzu cli
+
+```
+tanzu package repository add making-pkg \
+  --url ghcr.io/making/packages/pkg-repo:latest \
+  --namespace developer-env
+```
+
+```
+$ tanzu package available list -n developer-env
+- Retrieving available packages... 
+  NAME                      DISPLAY-NAME  SHORT-DESCRIPTION       LATEST-VERSION  
+  code-server.pkg.maki.lol  Code Server   VS Code in the browser  0.0.1 
+
+$ tanzu package available get code-server.pkg.maki.lol/0.0.1 --values-schema -n developer-env
+| Retrieving package details for code-server.pkg.maki.lol/0.0.1... 
+  KEY                              DEFAULT                                 TYPE     DESCRIPTION                                
+  suffix                           <nil>                                   string   Suffix of the namespace                    
+  code_server.clean                false                                   boolean  Whether to clean extension directory etc.  
+  code_server.create_namespace     true                                    boolean  Whether to create the namespace            
+  code_server.external_url_format  https://code-server-{}.localhost.ik.am  string   External URL format                        
+  code_server.ingress_class        <nil>                                   string   Explicit Ingress class name                
+  code_server.storage_size         10Gi                                    string   Storage Size                               
+  namespace                        demo                                    string   Namespace to install the code server  
+```
+
+```
+cat <<EOF > values-demo1.yaml
+namespace: developer-env
+suffix: demo1
+EOF
+cat <<EOF > values-demo2.yaml
+namespace: developer-env
+suffix: demo2
+EOF
+
+tanzu package install code-server-demo1 -p code-server.pkg.maki.lol -v 0.0.1 --values-file values-demo1.yaml -n developer-env
+tanzu package install code-server-demo2 -p code-server.pkg.maki.lol -v 0.0.1 --values-file values-demo2.yaml -n developer-env
+```
+
+### Verify installation
 
 ```
 $ kubectl get httpproxy -A
@@ -51,7 +94,11 @@ $ kubectl get secret -n developer-env-demo2 code-server-password -otemplate='{{.
 k1rhx2sflv9oohzhaemubdoie6emiuao65kqd962
 ```
 
-### How to configure values
+Go to 
+* https://code-server-demo1.localhost.ik.am for demo1
+* https://code-server-demo2.localhost.ik.am for demo2
+
+## How to configure values
 
 Update `values.yaml` in the Secret
 
@@ -73,6 +120,7 @@ stringData:
       ingress_class: contour-external
 ```
 
+## Development Note
 
 ### How to publish an imgpkg bundle
 
