@@ -21,8 +21,6 @@ RUN code-server --install-extension pivotal.vscode-spring-boot
 RUN code-server --install-extension vscjava.vscode-spring-initializr
 RUN code-server --install-extension vscjava.vscode-spring-boot-dashboard
 RUN code-server --install-extension redhat.vscode-yaml
-RUN code-server --install-extension pivotal.vscode-manifest-yaml
-RUN code-server --install-extension pivotal.vscode-concourse
 RUN code-server --install-extension adashen.vscode-tomcat
 RUN code-server --install-extension dgileadi.java-decompiler
 RUN code-server --install-extension gabrielbb.vscode-lombok
@@ -99,5 +97,5 @@ RUN wget -q -O kwt https://github.com/vmware-tanzu/carvel-kwt/releases/download/
     sudo install kwt /usr/local/bin/ && \
     rm -f kwt*
 
-RUN mkdir -p ${VSCODE_USER} && echo "{\"java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"maven.terminal.useJavaHome\":true, \"maven.executable.path\":\"/opt/apache-maven-${MAVEN_VERSION}/bin/mvn\",\"spring-boot.ls.java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"cloudfoundry-manifest.ls.java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"concourse.ls.java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"files.exclude\":{\"**/.classpath\":true,\"**/.project\":true,\"**/.settings\":true,\"**/.factorypath\":true}}" | jq . > ${VSCODE_USER}/settings.json
+RUN mkdir -p ${VSCODE_USER} && echo "{\"java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"maven.terminal.useJavaHome\":true, \"maven.executable.path\":\"/opt/apache-maven-${MAVEN_VERSION}/bin/mvn\",\"spring-boot.ls.java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"cloudfoundry-manifest.ls.java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"concourse.ls.java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"files.exclude\":{\"**/.classpath\":true,\"**/.project\":true,\"**/.settings\":true,\"**/.factorypath\":true},\"redhat.telemetry.enabled\":false}" | jq . > ${VSCODE_USER}/settings.json
 RUN rm -f /home/coder/.wget-hsts
