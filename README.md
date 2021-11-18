@@ -38,9 +38,9 @@ kubectl apply -f kapp/developer-env-demo2.yaml
 
 ```
 $ kubectl get httpproxy -A
-NAMESPACE             NAME          FQDN                                 TLS SECRET        STATUS   STATUS DESCRIPTION
-developer-env-demo1   code-server   coder-server-demo1.localhost.ik.am   code-server-tls   valid    Valid HTTPProxy
-developer-env-demo2   code-server   coder-server-demo2.localhost.ik.am   code-server-tls   valid    Valid HTTPProxy
+NAMESPACE             NAME          FQDN                                TLS SECRET        STATUS   STATUS DESCRIPTION
+developer-env-demo1   code-server   code-server-demo1.localhost.ik.am   code-server-tls   valid    Valid HTTPProxy
+developer-env-demo2   code-server   code-server-demo2.localhost.ik.am   code-server-tls   valid    Valid HTTPProxy
 ```
 
 ```
@@ -70,7 +70,7 @@ stringData:
     namespace: developer-env
     suffix: demo1
     code_server:
-      external_url_format: https://coder-server-{}.default.example.com
+      external_url_format: https://code-server-{}.default.example.com
       ingress_class: contour-external
 ```
 
