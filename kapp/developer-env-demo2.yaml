@@ -1,8 +1,17 @@
-apiVersion: kappctrl.k14s.io/v1alpha1
-kind: App
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
 metadata:
   name: code-server-demo2
   namespace: developer-env
+spec:
+  serviceAccountName: kapp-sa
+  packageRef:
+    refName: code-server.pkg.maki.lol
+    versionSelection:
+      constraints: 0.0.1
+  values:
+  - secretRef:
+      name: developer-env-demo1-values
 spec:
   serviceAccountName: kapp-sa
   fetch:
@@ -35,8 +44,6 @@ metadata:
   namespace: developer-env
 stringData:
   values.yaml: |
-    #@data/values
-    #@overlay/match-child-defaults missing_ok=True
     ---
     namespace: developer-env
     suffix: demo2

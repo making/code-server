@@ -1,0 +1,11 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  name: code-server.pkg.maki.lol
+spec:
+  displayName: "Code Server"
+  longDescription: "VS Code in the browser"
+  shortDescription: "VS Code in the browser"
+  categories:
+  - ide
+  - code-server

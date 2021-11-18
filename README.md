@@ -31,6 +31,7 @@ kubectl apply -f https://github.com/vmware-tanzu/carvel-secretgen-controller/rel
 
 ```
 kubectl apply -f kapp/namespace-role.yaml
+kubectl apply -f kapp/package-repository.yaml
 kubectl apply -f kapp/developer-env-demo1.yaml
 kubectl apply -f kapp/developer-env-demo2.yaml
 ```
@@ -80,9 +81,13 @@ stringData:
 ```
 docker build -t ghcr.io/making/code-server . 
 docker push ghcr.io/making/code-server
-kbld -f k8s --imgpkg-lock-output k8s/.imgpkg/images.yml  
+kbld -f config/code-server.yaml --imgpkg-lock-output config/.imgpkg/images.yml
+imgpkg push -b ghcr.io/making/code-server-bundle -f k8s 
 ```
 
+### How to publish a package
+
 ```
-imgpkg push -b ghcr.io/making/code-server-bundle -f k8s 
+kbld -f pkg-repo/packages --imgpkg-lock-output pkg-repo/.imgpkg/images.yml
+imgpkg push -b ghcr.io/making/packages/pkg-repo -f pkg-repo
 ```

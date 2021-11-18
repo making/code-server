@@ -1,0 +1,9 @@
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  name: making-pkg
+  namespace: developer-env
+spec:
+  fetch:
+    imgpkgBundle:
+      image: ghcr.io/making/packages/pkg-repo:latest

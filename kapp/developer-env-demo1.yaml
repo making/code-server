@@ -1,32 +1,17 @@
-apiVersion: kappctrl.k14s.io/v1alpha1
-kind: App
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
 metadata:
   name: code-server-demo1
   namespace: developer-env
 spec:
   serviceAccountName: kapp-sa
-  fetch:
-  - imgpkgBundle:
-      image: ghcr.io/making/code-server-bundle
-  template:
-  - ytt:
-      inline:
-        pathsFrom:
-        - secretRef:
-            name: developer-env-demo1-values
-  - kbld:
-      paths:
-      - "-"
-      - ".imgpkg/images.yml"
-  deploy:
-  - kapp:
-      rawOptions:
-      - --wait-timeout=5m
-      - --diff-changes=true
-      - --diff-mask=false
-      inspect:
-        rawOptions:
-        - --tree=true
+  packageRef:
+    refName: code-server.pkg.maki.lol
+    versionSelection:
+      constraints: 0.0.1
+  values:
+  - secretRef:
+      name: developer-env-demo1-values
 ---
 apiVersion: v1
 kind: Secret
@@ -35,8 +20,6 @@ metadata:
   namespace: developer-env
 stringData:
   values.yaml: |
-    #@data/values
-    #@overlay/match-child-defaults missing_ok=True
     ---
     namespace: developer-env
-    suffix: demo1   
+    suffix: demo1
