@@ -138,7 +138,7 @@ spec:
     spec:
       initContainers:
       - name: copy-files
-        image: #@ data.values.code_server.app_image
+        image: ghcr.io/making/code-server:latest
         command:
         - bash
         - -cex
@@ -167,7 +167,7 @@ spec:
         - mountPath: /var/coder
           name: code-server-storage
       - name: change-own
-        image: #@ data.values.code_server.change_own_image
+        image: ghcr.io/making/busybox:latest
         command: [ "/bin/chown","-R","1000:1000","/home/coder" ]
         securityContext:
           runAsUser: 0
@@ -176,7 +176,7 @@ spec:
           name: code-server-storage
       containers:
       - name: code-server
-        image: #@ data.values.code_server.app_image
+        image: ghcr.io/making/code-server:latest
         imagePullPolicy: Always
         env:
         - name: PORT

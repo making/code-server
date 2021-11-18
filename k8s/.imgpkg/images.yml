@@ -1,0 +1,18 @@
+---
+apiVersion: imgpkg.carvel.dev/v1alpha1
+images:
+- annotations:
+    kbld.carvel.dev/id: ghcr.io/making/busybox:latest
+    kbld.carvel.dev/origins: |
+      - resolved:
+          tag: latest
+          url: ghcr.io/making/busybox:latest
+  image: ghcr.io/making/busybox@sha256:ee44b399df993016003bf5466bd3eeb221305e9d0fa831606bc7902d149c775b
+- annotations:
+    kbld.carvel.dev/id: ghcr.io/making/code-server:latest
+    kbld.carvel.dev/origins: |
+      - resolved:
+          tag: latest
+          url: ghcr.io/making/code-server:latest
+  image: ghcr.io/making/code-server@sha256:8d151332c6f50ed3ec71bff00c8b18793ea2320e095e221ce59570b31318ccae
+kind: ImagesLock

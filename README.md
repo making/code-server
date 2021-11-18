@@ -73,3 +73,16 @@ stringData:
       external_url_format: https://coder-server-{}.default.example.com
       ingress_class: contour-external
 ```
+
+
+### How to publish an imgpkg bundle
+
+```
+docker build -t ghcr.io/making/code-server . 
+docker push ghcr.io/making/code-server
+kbld -f k8s --imgpkg-lock-output k8s/.imgpkg/images.yml  
+```
+
+```
+imgpkg push -b ghcr.io/making/code-server-bundle -f k8s 
+```
