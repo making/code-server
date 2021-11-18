@@ -145,7 +145,7 @@ spec:
         #@yaml/text-templated-strings
         - |
           (@ if data.values.code_server.clean: -@)
-          rm -rf /home/coder/.local/share/code-server/extensions
+          rm -rf /var/coder/.local/share/code-server/extensions
           rm -f /var/coder/.local/share/code-server/User/settings.json
           rm -f /var/coder/.bashrc
           (@- end @)
