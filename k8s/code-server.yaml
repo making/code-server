@@ -142,12 +142,18 @@ spec:
         command:
         - bash
         - -cex
+        #@yaml/text-templated-strings
         - |
+          (@ if data.values.code_server.clean: -@)
+          rm -rf /home/coder/.local/share/code-server/extensions
+          rm -f /var/coder/.local/share/code-server/User/settings.json
+          rm -f /var/coder/.bashrc
+          (@- end @)
           if [ ! -d /var/coder/.local/share/code-server/extensions ]; then
             mkdir -p /var/coder/.local/share/code-server
             mv /home/coder/.local/share/code-server/extensions /var/coder/.local/share/code-server/
           fi
-          if [ ! -f /var/coder/.local/share/code-server/User ]; then
+          if [ ! -f /var/coder/.local/share/code-server/User/settings.json ]; then
             mkdir -p /var/coder/.local/share/code-server/User
             cp /home/coder/.local/share/code-server/User/settings.json /var/coder/.local/share/code-server/User/
           fi
