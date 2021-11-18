@@ -24,9 +24,9 @@ kind create cluster --config kind-expose-port.yaml
 
 ```
 kubectl apply -f https://projectcontour.io/quickstart/contour.yaml
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.4.3/cert-manager.yaml
-kubectl apply -f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/download/v0.22.0/release.yml
-kubectl apply -f https://github.com/vmware-tanzu/carvel-secretgen-controller/releases/download/v0.3.0/release.yml
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml
+kubectl apply -f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/download/v0.30.0/release.yml
+kubectl apply -f https://github.com/vmware-tanzu/carvel-secretgen-controller/releases/download/v0.7.1/release.yml
 ```
 
 ```
@@ -48,4 +48,28 @@ $ kubectl get secret -n developer-env-demo1 code-server-password -otemplate='{{.
 gjknfacl031ndksztukfuxv916exbbjbhdvryaud
 $ kubectl get secret -n developer-env-demo2 code-server-password -otemplate='{{.data.password | base64decode}}'
 k1rhx2sflv9oohzhaemubdoie6emiuao65kqd962
+```
+
+### How to configure values
+
+Update `values.yaml` in the Secret
+
+```yaml
+# ...   
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: developer-env-demo1-values
+  namespace: developer-env
+stringData:
+  values.yaml: |
+    #@data/values
+    #@overlay/match-child-defaults missing_ok=True
+    ---
+    namespace: developer-env
+    suffix: demo1
+    code_server:
+      external_url_format: https://coder-server-{}.default.example.com
+      ingress_class: contour-external
 ```
