@@ -41,10 +41,10 @@ kubectl apply -f https://github.com/vmware-tanzu/carvel-secretgen-controller/rel
 ### Install via kubectl
 
 ```
-kubectl apply -f kapp/namespace-role.yaml
-kubectl apply -f kapp/package-repository.yaml
-kubectl apply -f kapp/developer-env-demo1.yaml
-kubectl apply -f kapp/developer-env-demo2.yaml
+kubectl apply -f demo/namespace-role.yaml
+kubectl apply -f demo/package-repository.yaml
+kubectl apply -f demo/developer-env-demo1.yaml
+kubectl apply -f demo/developer-env-demo2.yaml
 ```
 
 ### Install via tanzu cli
