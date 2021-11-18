@@ -30,8 +30,12 @@ RUN wget -q -O OpenJDK.tar.gz https://download.bell-sw.com/java/17.0.1+12/bellso
     tar xzf OpenJDK.tar.gz && \
     sudo mv jdk* /opt/ && \
     rm -f OpenJDK.tar.gz && \
-    echo "export JAVA_HOME=$(dirname /opt/jdk-*/bin/)" | sudo tee -a /home/coder/.bashrc > /dev/null && \
-    echo 'export PATH=${PATH}:${JAVA_HOME}/bin' | sudo tee -a /home/coder/.bashrc > /dev/null
+    echo "export JAVA_HOME=$(dirname /opt/jdk-*/bin/)" | sudo tee -a /etc/profile.d/00-java.sh > /dev/null && \
+    echo 'export JRE_HOME=${JAVA_HOME}' | sudo tee -a /etc/profile.d/00-java.sh > /dev/null && \
+    echo 'export PATH=${PATH}:${JAVA_HOME}/bin' | sudo tee -a /etc/profile.d/00-java.sh > /dev/null
+USER root
+RUN chmod +x /etc/profile.d/00-java.sh
+USER coder
 
 # Maven
 ENV MAVEN_VERSION=3.8.3
@@ -39,8 +43,11 @@ RUN wget -q -O maven.tar.gz http://ftp.riken.jp/net/apache/maven/maven-3/${MAVEN
     tar xzf maven.tar.gz && \
     sudo mv apache-maven-* /opt/ && \
     rm -f maven.tar.gz && \
-    echo "export MAVEN_HOME=/opt/apache-maven-${MAVEN_VERSION}" | sudo tee -a /home/coder/.bashrc > /dev/null && \
-    echo 'export PATH=${PATH}:${MAVEN_HOME}/bin' | sudo tee -a /home/coder/.bashrc > /dev/null
+    echo "export MAVEN_HOME=/opt/apache-maven-${MAVEN_VERSION}" | sudo tee -a /etc/profile.d/01-maven.sh > /dev/null && \
+    echo 'export PATH=${PATH}:${MAVEN_HOME}/bin' | sudo tee -a /etc/profile.d/01-maven.sh > /dev/null
+USER root
+RUN chmod +x /etc/profile.d/01-maven.sh
+USER coder
 
 # Kubectl
 ENV KUBECTL_VERSION 1.22.0
@@ -97,5 +104,6 @@ RUN wget -q -O kwt https://github.com/vmware-tanzu/carvel-kwt/releases/download/
     sudo install kwt /usr/local/bin/ && \
     rm -f kwt*
 
-RUN mkdir -p ${VSCODE_USER} && echo "{\"java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"maven.terminal.useJavaHome\":true, \"maven.executable.path\":\"/opt/apache-maven-${MAVEN_VERSION}/bin/mvn\",\"spring-boot.ls.java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"cloudfoundry-manifest.ls.java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"concourse.ls.java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"files.exclude\":{\"**/.classpath\":true,\"**/.project\":true,\"**/.settings\":true,\"**/.factorypath\":true},\"redhat.telemetry.enabled\":false}" | jq . > ${VSCODE_USER}/settings.json
+RUN mkdir -p ${VSCODE_USER} && echo "{\"java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"maven.terminal.useJavaHome\":true, \"maven.executable.path\":\"/opt/apache-maven-${MAVEN_VERSION}/bin/mvn\",\"spring-boot.ls.java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"files.exclude\":{\"**/.classpath\":true,\"**/.project\":true,\"**/.settings\":true,\"**/.factorypath\":true},\"redhat.telemetry.enabled\":false}" | jq . > ${VSCODE_USER}/settings.json
+RUN echo 'for f in /etc/profile.d/*.sh;do source $f;done' | sudo tee -a /home/coder/.bashrc > /dev/null
 RUN rm -f /home/coder/.wget-hsts
