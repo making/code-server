@@ -65,8 +65,6 @@ metadata:
   namespace: developer-env
 stringData:
   values.yaml: |
-    #@data/values
-    #@overlay/match-child-defaults missing_ok=True
     ---
     namespace: developer-env
     suffix: demo1
