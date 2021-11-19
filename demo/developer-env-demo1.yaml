@@ -23,6 +23,3 @@ stringData:
     ---
     namespace: developer-env
     suffix: demo1
-    code_server:
-      external_url_format: https://coder-server-{}.leopard.maki.lol
-      ingress_class: contour-external
