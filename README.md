@@ -60,7 +60,7 @@ kubectl apply -f demo/developer-env-demo2.yaml
 
 ```
 tanzu package repository add making-pkg \
-  --url ghcr.io/making/packages/pkg-repo:latest \
+  --url ghcr.io/making/pkg-repo:0.0.1 \
   --namespace developer-env
 ```
 
@@ -153,5 +153,5 @@ imgpkg push -b ghcr.io/making/code-server-bundle -f k8s
 
 ```
 kbld -f pkg-repo/packages --imgpkg-lock-output pkg-repo/.imgpkg/images.yml
-imgpkg push -b ghcr.io/making/packages/pkg-repo -f pkg-repo
+imgpkg push -b ghcr.io/making/pkg-repo:0.0.1 -f pkg-repo
 ```

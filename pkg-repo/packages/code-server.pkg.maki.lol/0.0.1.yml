@@ -61,7 +61,7 @@ spec:
     spec:
       fetch:
       - imgpkgBundle:
-          image: ghcr.io/making/code-server-bundle
+          image: ghcr.io/making/code-server-bundle:0.0.1
       template:
       - ytt: { }
       - kbld:
