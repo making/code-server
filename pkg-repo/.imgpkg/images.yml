@@ -15,4 +15,11 @@ images:
           tag: 0.0.2
           url: ghcr.io/making/code-server-bundle:0.0.2
   image: ghcr.io/making/code-server-bundle@sha256:a5d300d92d8d62d94e86e23be902fc704694553e9ab9dd04dfde9a89fcbc0efb
+- annotations:
+    kbld.carvel.dev/id: ghcr.io/making/code-server-bundle:0.0.3
+    kbld.carvel.dev/origins: |
+      - resolved:
+          tag: 0.0.3
+          url: ghcr.io/making/code-server-bundle:0.0.3
+  image: ghcr.io/making/code-server-bundle@sha256:0cf414f2da349c821af41e7acc670fedcb24af0429b0d325e3dbeb5a7b5e2625
 kind: ImagesLock

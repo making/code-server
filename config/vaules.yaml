@@ -8,4 +8,11 @@ code_server:
   storage_size: 10Gi
   create_namespace: true
   clean: false
-  ingress_class: 
+  ingress_class:
+resources:
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+  requests:
+    cpu: 1000m
+    memory: 2Gi

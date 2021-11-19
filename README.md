@@ -41,8 +41,8 @@ kubectl apply -f https://github.com/vmware-tanzu/carvel-secretgen-controller/rel
 ### Quick Install
 
 ```
-ytt -f config/code-server.yaml -f config/vaules.yaml -v namespace=developer-env -v suffix=demo1 | kubectl apply -f
-ytt -f config/code-server.yaml -f config/vaules.yaml -v namespace=developer-env -v suffix=demo2 | kubectl apply -f
+ytt -f config/code-server.yaml -f config/vaules.yaml -v namespace=developer-env -v suffix=demo1 | kubectl apply -f -
+ytt -f config/code-server.yaml -f config/vaules.yaml -v namespace=developer-env -v suffix=demo2 | kubectl apply -f -
 ```
 
 ### Install using Carvel Package
@@ -60,7 +60,7 @@ kubectl apply -f demo/developer-env-demo2.yaml
 
 ```
 tanzu package repository add making-pkg \
-  --url ghcr.io/making/pkg-repo:0.0.2 \
+  --url ghcr.io/making/pkg-repo:0.0.3 \
   --namespace developer-env
 ```
 
@@ -68,18 +68,22 @@ tanzu package repository add making-pkg \
 $ tanzu package available list -n developer-env
 - Retrieving available packages... 
   NAME                      DISPLAY-NAME  SHORT-DESCRIPTION       LATEST-VERSION  
-  code-server.pkg.maki.lol  Code Server   VS Code in the browser  0.0.2 
+  code-server.pkg.maki.lol  Code Server   VS Code in the browser  0.0.3 
 
-$ tanzu package available get code-server.pkg.maki.lol/0.0.2 --values-schema -n developer-env
-| Retrieving package details for code-server.pkg.maki.lol/0.0.2... 
-  KEY                              DEFAULT                                 TYPE     DESCRIPTION                                
-  suffix                           <nil>                                   string   Suffix of the namespace                    
-  code_server.clean                false                                   boolean  Whether to clean extension directory etc.  
-  code_server.create_namespace     true                                    boolean  Whether to create the namespace            
-  code_server.external_url_format  https://code-server-{}.localhost.ik.am  string   External URL format                        
-  code_server.ingress_class        <nil>                                   string   Explicit Ingress class name                
-  code_server.storage_size         10Gi                                    string   Storage Size                               
-  namespace                        demo                                    string   Namespace to install the code server  
+$ tanzu package available get code-server.pkg.maki.lol/0.0.3 --values-schema -n developer-env
+| Retrieving package details for code-server.pkg.maki.lol/0.0.3... 
+  KEY                              DEFAULT                                 TYPE     DESCRIPTION                                                          
+  code_server.external_url_format  https://code-server-{}.localhost.ik.am  string   External URL format                                                  
+  code_server.ingress_class        <nil>                                   string   Explicit Ingress class name                                          
+  code_server.storage_size         10Gi                                    string   Storage Size                                                         
+  code_server.clean                false                                   boolean  Whether to clean extension directory etc.                            
+  code_server.create_namespace     true                                    boolean  Whether to create the namespace                                      
+  namespace                        demo                                    string   Namespace to install the code server                                 
+  resources.limits.cpu             2000m                                   <nil>    Limits describes the maximum amount of cpu resources allowed.        
+  resources.limits.memory          4Gi                                     <nil>    Limits describes the maximum amount of memory resources allowed.     
+  resources.requests.cpu           1000m                                   <nil>    Requests describes the minimum amount of cpu resources required.     
+  resources.requests.memory        2Gi                                     <nil>    Requests describes the minimum amount of memory resources required.  
+  suffix                           <nil>                                   string   Suffix of the namespace  
 ```
 
 ```
@@ -87,14 +91,14 @@ cat <<EOF > values-demo1.yaml
 namespace: developer-env
 suffix: demo1
 EOF
-tanzu package install code-server-demo1 -p code-server.pkg.maki.lol -v 0.0.2 --values-file values-demo1.yaml -n developer-env
+tanzu package install code-server-demo1 -p code-server.pkg.maki.lol -v 0.0.3 --values-file values-demo1.yaml -n developer-env
 
 
 cat <<EOF > values-demo2.yaml
 namespace: developer-env
 suffix: demo2
 EOF
-tanzu package install code-server-demo2 -p code-server.pkg.maki.lol -v 0.0.2 --values-file values-demo2.yaml -n developer-env
+tanzu package install code-server-demo2 -p code-server.pkg.maki.lol -v 0.0.3 --values-file values-demo2.yaml -n developer-env
 ```
 
 ### Verify installation
@@ -144,15 +148,20 @@ stringData:
 ### How to publish an imgpkg bundle
 
 ```
+VERSION=0.0.3
 docker build -t ghcr.io/making/code-server . 
 docker push ghcr.io/making/code-server
 kbld -f config/code-server.yaml --imgpkg-lock-output config/.imgpkg/images.yml
-imgpkg push -b ghcr.io/making/code-server-bundle:0.0.2 -f config
+imgpkg push -b ghcr.io/making/code-server-bundle:${VERSION} -f config
 ```
 
 ### How to publish a package
 
 ```
+touch pkg-repo/packages/code-server.pkg.maki.lol/${VERSION}.yml
+# Edit ${VERSION}.yml
 kbld -f pkg-repo/packages --imgpkg-lock-output pkg-repo/.imgpkg/images.yml
-imgpkg push -b ghcr.io/making/pkg-repo:0.0.2 -f pkg-repo
+imgpkg push -b ghcr.io/making/pkg-repo:${VERSION} -f pkg-repo
 ```
+
+Update `demo/package-repository.yaml` and `README.md`

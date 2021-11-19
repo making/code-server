@@ -188,6 +188,7 @@ spec:
             secretKeyRef:
               name: code-server-password
               key: password
+        resources: #@ data.values.resources
         ports:
         - containerPort: 3080
           name: http
