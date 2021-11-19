@@ -60,7 +60,7 @@ kubectl apply -f demo/developer-env-demo2.yaml
 
 ```
 tanzu package repository add making-pkg \
-  --url ghcr.io/making/pkg-repo:0.0.1 \
+  --url ghcr.io/making/pkg-repo:0.0.2 \
   --namespace developer-env
 ```
 
@@ -68,10 +68,10 @@ tanzu package repository add making-pkg \
 $ tanzu package available list -n developer-env
 - Retrieving available packages... 
   NAME                      DISPLAY-NAME  SHORT-DESCRIPTION       LATEST-VERSION  
-  code-server.pkg.maki.lol  Code Server   VS Code in the browser  0.0.1 
+  code-server.pkg.maki.lol  Code Server   VS Code in the browser  0.0.2 
 
-$ tanzu package available get code-server.pkg.maki.lol/0.0.1 --values-schema -n developer-env
-| Retrieving package details for code-server.pkg.maki.lol/0.0.1... 
+$ tanzu package available get code-server.pkg.maki.lol/0.0.2 --values-schema -n developer-env
+| Retrieving package details for code-server.pkg.maki.lol/0.0.2... 
   KEY                              DEFAULT                                 TYPE     DESCRIPTION                                
   suffix                           <nil>                                   string   Suffix of the namespace                    
   code_server.clean                false                                   boolean  Whether to clean extension directory etc.  
@@ -87,13 +87,14 @@ cat <<EOF > values-demo1.yaml
 namespace: developer-env
 suffix: demo1
 EOF
+tanzu package install code-server-demo1 -p code-server.pkg.maki.lol -v 0.0.2 --values-file values-demo1.yaml -n developer-env
+
+
 cat <<EOF > values-demo2.yaml
 namespace: developer-env
 suffix: demo2
 EOF
-
-tanzu package install code-server-demo1 -p code-server.pkg.maki.lol -v 0.0.1 --values-file values-demo1.yaml -n developer-env
-tanzu package install code-server-demo2 -p code-server.pkg.maki.lol -v 0.0.1 --values-file values-demo2.yaml -n developer-env
+tanzu package install code-server-demo2 -p code-server.pkg.maki.lol -v 0.0.2 --values-file values-demo2.yaml -n developer-env
 ```
 
 ### Verify installation
@@ -146,12 +147,12 @@ stringData:
 docker build -t ghcr.io/making/code-server . 
 docker push ghcr.io/making/code-server
 kbld -f config/code-server.yaml --imgpkg-lock-output config/.imgpkg/images.yml
-imgpkg push -b ghcr.io/making/code-server-bundle -f k8s 
+imgpkg push -b ghcr.io/making/code-server-bundle:0.0.2 -f config
 ```
 
 ### How to publish a package
 
 ```
 kbld -f pkg-repo/packages --imgpkg-lock-output pkg-repo/.imgpkg/images.yml
-imgpkg push -b ghcr.io/making/pkg-repo:0.0.1 -f pkg-repo
+imgpkg push -b ghcr.io/making/pkg-repo:0.0.2 -f pkg-repo
 ```

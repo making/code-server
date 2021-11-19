@@ -7,7 +7,7 @@ images:
       - resolved:
           tag: latest
           url: ghcr.io/making/busybox:latest
-  image: ghcr.io/making/busybox@sha256:ee44b399df993016003bf5466bd3eeb221305e9d0fa831606bc7902d149c775b
+  image: ghcr.io/making/busybox@sha256:34efe68cca33507682b1673c851700ec66839ecf94d19b928176e20d20e02413
 - annotations:
     kbld.carvel.dev/id: ghcr.io/making/code-server:latest
     kbld.carvel.dev/origins: |

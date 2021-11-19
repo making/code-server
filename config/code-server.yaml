@@ -70,29 +70,31 @@ spec:
     name: code-server-ca-issuer
   secretName: code-server-tls
 ---
-apiVersion: projectcontour.io/v1
-kind: HTTPProxy
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: code-server
   namespace: #@ namespace
   annotations:
     #@ if/end data.values.code_server.ingress_class:
-    projectcontour.io/ingress.class: #@ data.values.code_server.ingress_class   
-  labels:
-    #@ if/end data.values.code_server.ingress_class:
-    projectcontour.io/ingress.class: #@ data.values.code_server.ingress_class 
+    kubernetes.io/ingress.class: #@ data.values.code_server.ingress_class
+    projectcontour.io/websocket-routes: /
 spec:
-  virtualhost:
-    fqdn: #@ hostname
-    tls:
-      secretName: code-server-tls
-  routes:
-  - conditions:
-    - prefix: /
-    enableWebsockets: true
-    services:
-    - name: code-server
-      port: 3080
+  rules:
+  - host: #@ hostname
+    http:
+      paths:
+      - backend:
+          service:
+            name: code-server
+            port:
+              number: 3080
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - #@ hostname
+    secretName: code-server-tls
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
