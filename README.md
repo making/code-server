@@ -164,4 +164,4 @@ kbld -f pkg-repo/packages --imgpkg-lock-output pkg-repo/.imgpkg/images.yml
 imgpkg push -b ghcr.io/making/pkg-repo:${VERSION} -f pkg-repo
 ```
 
-Update `demo/package-repository.yaml` and `README.md`
+Update `demo/*.yaml` and `README.md`
