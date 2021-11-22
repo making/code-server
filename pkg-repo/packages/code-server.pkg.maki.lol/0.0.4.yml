@@ -1,0 +1,96 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: code-server.pkg.maki.lol.0.0.4
+spec:
+  refName: code-server.pkg.maki.lol
+  version: 0.0.4
+  releaseNotes: |
+    Initial release of code server
+  valuesSchema:
+    openAPIv3:
+      type: object
+      additionalProperties: false
+      properties:
+        namespace:
+          type: string
+          default: demo
+          description: Namespace to install the code server
+        suffix:
+          type: string
+          default: null
+          nullable: true
+          description: Suffix of the namespace
+        code_server:
+          type: object
+          additionalProperties: false
+          properties:
+            external_url_format:
+              type: string
+              default: https://code-server-{}.localhost.ik.am
+              description: External URL format
+            storage_size:
+              type: string
+              default: 10Gi
+              description: Storage Size
+            create_namespace:
+              type: boolean
+              default: true
+              description: Whether to create the namespace
+            clean:
+              type: boolean
+              default: false
+              description: Whether to clean extension directory etc.
+            ingress_class:
+              type: string
+              default: null
+              nullable: true
+              description: Explicit Ingress class name
+        resources:
+          type: object
+          additionalProperties: false
+          properties:
+            limits:
+              type: object
+              additionalProperties: false
+              properties:
+                cpu:
+                  type: string
+                  default: 2000m
+                  description: Limits describes the maximum amount of cpu resources allowed.
+                memory:
+                  type: string
+                  default: 4Gi
+                  description: Limits describes the maximum amount of memory resources allowed.
+            requests:
+              type: object
+              additionalProperties: false
+              properties:
+                cpu:
+                  type: string
+                  default: 1000m
+                  description: Requests describes the minimum amount of cpu resources required.
+                memory:
+                  type: string
+                  default: 2Gi
+                  description: Requests describes the minimum amount of memory resources required.
+  template:
+    spec:
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/making/code-server-bundle:0.0.4
+      template:
+      - ytt: {}
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+      deploy:
+      - kapp:
+          rawOptions:
+          - --wait-timeout=5m
+          - --diff-changes=true
+          - --diff-mask=false
+          inspect:
+            rawOptions:
+            - --tree=true

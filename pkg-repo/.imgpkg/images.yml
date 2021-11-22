@@ -2,24 +2,10 @@
 apiVersion: imgpkg.carvel.dev/v1alpha1
 images:
 - annotations:
-    kbld.carvel.dev/id: ghcr.io/making/code-server-bundle:0.0.1
+    kbld.carvel.dev/id: ghcr.io/making/code-server-bundle:0.0.4
     kbld.carvel.dev/origins: |
       - resolved:
-          tag: 0.0.1
-          url: ghcr.io/making/code-server-bundle:0.0.1
-  image: ghcr.io/making/code-server-bundle@sha256:a51e7b0b07a83dc12c29c52b644c5008d4f8b3ebf92f1697337f07ac4730960f
-- annotations:
-    kbld.carvel.dev/id: ghcr.io/making/code-server-bundle:0.0.2
-    kbld.carvel.dev/origins: |
-      - resolved:
-          tag: 0.0.2
-          url: ghcr.io/making/code-server-bundle:0.0.2
-  image: ghcr.io/making/code-server-bundle@sha256:a5d300d92d8d62d94e86e23be902fc704694553e9ab9dd04dfde9a89fcbc0efb
-- annotations:
-    kbld.carvel.dev/id: ghcr.io/making/code-server-bundle:0.0.3
-    kbld.carvel.dev/origins: |
-      - resolved:
-          tag: 0.0.3
-          url: ghcr.io/making/code-server-bundle:0.0.3
-  image: ghcr.io/making/code-server-bundle@sha256:0cf414f2da349c821af41e7acc670fedcb24af0429b0d325e3dbeb5a7b5e2625
+          tag: 0.0.4
+          url: ghcr.io/making/code-server-bundle:0.0.4
+  image: ghcr.io/making/code-server-bundle@sha256:015cd6fe4de64c1592a53cb96852f18df177e4bc1f286a95c806b9c44c8c3d67
 kind: ImagesLock

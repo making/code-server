@@ -1,18 +1,30 @@
-#@data/values
-#@overlay/match-child-defaults missing_ok=True
+#@data/values-schema
 ---
+#@schema/desc "Namespace to install the code server"
 namespace: demo
-suffix:
+#@schema/desc "Suffix of the namespace"
+#@schema/nullable
+suffix: ""
 code_server:
+  #@schema/desc "External URL format"
   external_url_format: https://code-server-{}.localhost.ik.am
+  #@schema/desc "Storage Size"
   storage_size: 10Gi
+  #@schema/desc "Whether to create the namespace"
   create_namespace: true
+  #@schema/desc "Whether to clean extension directory etc."
   clean: false
-  ingress_class:
+  #@schema/desc "Explicit Ingress class name"
+  #@schema/nullable
+  ingress_class: ""
 resources:
   limits:
+    #@schema/desc "Limits describes the maximum amount of cpu resources allowed."
     cpu: 2000m
+    #@schema/desc "Limits describes the maximum amount of memory resources allowed."
     memory: 4Gi
   requests:
+    #@schema/desc "Requests describes the minimum amount of cpu resources required."
     cpu: 1000m
+    #@schema/desc "Requests describes the minimum amount of memory resources required."
     memory: 2Gi
