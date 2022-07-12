@@ -6,4 +6,4 @@ metadata:
 spec:
   fetch:
     imgpkgBundle:
-      image: ghcr.io/making/pkg-repo:0.0.4
+      image: ghcr.io/making/pkg-repo:0.0.11

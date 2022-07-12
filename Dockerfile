@@ -1,11 +1,17 @@
 FROM codercom/code-server
 
 # Misc
+RUN sudo apt-get update && sudo apt-get install --no-install-recommends -y gnupg2 curl
 RUN sudo apt-get update && sudo apt-get install --no-install-recommends -y \
     jq \
     unzip \
     libarchive-tools \
     wget \
+    dnsutils \
+    netcat \
+    telnet \
+    postgresql-client \
+    mosquitto-clients \
     && sudo rm -rf /var/lib/apt/lists/*
 
 # Visual Studio Code Extentions
@@ -25,8 +31,14 @@ RUN code-server --install-extension adashen.vscode-tomcat
 RUN code-server --install-extension dgileadi.java-decompiler
 RUN code-server --install-extension gabrielbb.vscode-lombok
 
+# MongoDB
+ENV MONGODB_VERSION=5.0.9
+RUN wget -q https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-amd64/mongodb-org-shell_${MONGODB_VERSION}_amd64.deb && \
+    sudo dpkg -i mongodb-org-shell_${MONGODB_VERSION}_amd64.deb && \
+    rm -f mongodb-org-shell_${MONGODB_VERSION}_amd64.deb
+
 # Liberica JDK
-RUN wget -q -O OpenJDK.tar.gz https://download.bell-sw.com/java/17.0.1+12/bellsoft-jdk17.0.1+12-linux-amd64.tar.gz && \
+RUN wget -q -O OpenJDK.tar.gz https://download.bell-sw.com/java/17.0.3.1+2/bellsoft-jdk17.0.3.1+2-linux-amd64.tar.gz && \
     tar xzf OpenJDK.tar.gz && \
     sudo mv jdk* /opt/ && \
     rm -f OpenJDK.tar.gz && \
@@ -37,8 +49,15 @@ USER root
 RUN chmod +x /etc/profile.d/00-java.sh
 USER coder
 
+# Tanzu
+ENV TANZU_VERSION=0.12.1
+RUN wget -q -O tce.tar.gz https://github.com/vmware-tanzu/community-edition/releases/download/v${TANZU_VERSION}/tce-linux-amd64-v${TANZU_VERSION}.tar.gz && \
+    tar xzvf tce.tar.gz && \
+    ./tce-linux-amd64-v${TANZU_VERSION}/install.sh && \
+    rm -fr tce*
+
 # Maven
-ENV MAVEN_VERSION=3.8.3
+ENV MAVEN_VERSION=3.8.6
 RUN wget -q -O maven.tar.gz http://ftp.riken.jp/net/apache/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz && \
     tar xzf maven.tar.gz && \
     sudo mv apache-maven-* /opt/ && \
@@ -50,59 +69,100 @@ RUN chmod +x /etc/profile.d/01-maven.sh
 USER coder
 
 # Kubectl
-ENV KUBECTL_VERSION 1.22.0
+ENV KUBECTL_VERSION 1.23.8
 RUN wget -q -O kubectl "https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     sudo install kubectl /usr/local/bin/ && \
     rm -f kubectl*
 
 # HELM
-ENV HELM_VERSION 3.7.1
+ENV HELM_VERSION 3.9.0
 RUN wget -q -O helm.tgz "https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz" && \
     tar xzf helm.tgz && \
     sudo install linux-amd64/helm /usr/local/bin/ && \
     rm -rf linux-amd64 helm.tgz
 
 # Terraform
-ENV TERRAFORM_VERSION 1.0.11
+ENV TERRAFORM_VERSION 1.2.4
 RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip terraform.zip && \
     sudo install terraform /usr/local/bin/ && \
     rm -f terraform*
 
 # yj
-RUN wget -q -O yj https://github.com/sclevine/yj/releases/download/v5.0.0/yj-linux && \
+RUN wget -q -O yj https://github.com/sclevine/yj/releases/download/v5.1.0/yj-linux-amd64 && \
     sudo install yj /usr/local/bin/ && \
     rm -f yj*
 
 # ytt
-ENV YTT_VERSION 0.37.0
+ENV YTT_VERSION 0.41.1
 RUN wget -q -O ytt https://github.com/vmware-tanzu/carvel-ytt/releases/download/v${YTT_VERSION}/ytt-linux-amd64 && \
     sudo install ytt /usr/local/bin/ && \
     rm -f ytt*
 
 # kapp
-ENV KAPP_VERSION 0.42.0
+ENV KAPP_VERSION 0.49.0
 RUN wget -q -O kapp https://github.com/vmware-tanzu/carvel-kapp/releases/download/v${KAPP_VERSION}/kapp-linux-amd64 && \
     sudo install kapp /usr/local/bin/ && \
     rm -f kapp*
 
 # kbld
-ENV KBLD_VERSION 0.31.0
+ENV KBLD_VERSION 0.34.0
 RUN wget -q -O kbld https://github.com/vmware-tanzu/carvel-kbld/releases/download/v${KBLD_VERSION}/kbld-linux-amd64 && \
     sudo install kbld /usr/local/bin/ && \
     rm -f kbld*
 
 # imgpkg
-ENV IMGPKG_VERSION 0.22.0
+ENV IMGPKG_VERSION 0.29.0
 RUN wget -q -O imgpkg https://github.com/vmware-tanzu/carvel-imgpkg/releases/download/v${IMGPKG_VERSION}/imgpkg-linux-amd64 && \
     sudo install imgpkg /usr/local/bin/ && \
     rm -f imgpkg*
+
+# kctrl
+ENV KCTRL_VERSION 0.38.4
+RUN wget -q -O kctrl https://github.com/vmware-tanzu/carvel-kapp-controller/releases/download/v${KCTRL_VERSION}/kctrl-linux-amd64 && \
+    sudo install kctrl /usr/local/bin/ && \
+    rm -f kctrl*
 
 # kwt
 ENV KWT_VERSION 0.0.6
 RUN wget -q -O kwt https://github.com/vmware-tanzu/carvel-kwt/releases/download/v${KWT_VERSION}/kwt-linux-amd64 && \
     sudo install kwt /usr/local/bin/ && \
     rm -f kwt*
+
+# SCDF Shell
+ENV SCDF_VERSION 2.9.4
+RUN wget -q https://repo.spring.io/release/org/springframework/cloud/spring-cloud-dataflow-shell/${SCDF_VERSION}/spring-cloud-dataflow-shell-${SCDF_VERSION}.jar && \
+    sudo mv spring-cloud-dataflow-shell-${SCDF_VERSION}.jar /opt/
+
+# WebSocat
+ENV WEBSOCAT_VERSION=1.10.0
+RUN wget -q -O websocat https://github.com/vi/websocat/releases/download/v${WEBSOCAT_VERSION}/websocat.x86_64-unknown-linux-musl && \
+    sudo install websocat /usr/local/bin/ && \
+    rm -f websocat*
+
+# Stern
+ENV STERN_VERSION 1.21.0
+RUN wget -q https://github.com/stern/stern/releases/download/v${STERN_VERSION}/stern_${STERN_VERSION}_linux_amd64.tar.gz && \
+    tar xzf stern_${STERN_VERSION}_linux_amd64.tar.gz && \
+    sudo install stern /usr/local/bin/ && \
+    rm -rf stern*
+
+# pivnet
+ENV PIVNET_VERSION 3.0.1
+RUN wget -q -O pivnet https://github.com/pivotal-cf/pivnet-cli/releases/download/v${PIVNET_VERSION}/pivnet-linux-amd64-${PIVNET_VERSION} && \
+    sudo install pivnet /usr/local/bin/ && \
+    rm -f pivnet*
+
+# AWS
+RUN curl -s "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    sudo ./aws/install && \
+    rm -rf aws
+
+# AZURE
+RUN wget -q -O az.deb https://packages.microsoft.com/repos/azure-cli/pool/main/a/azure-cli/azure-cli_2.38.0-1~focal_all.deb && \
+    sudo dpkg -i az.deb && \
+    rm -f az.deb
 
 RUN mkdir -p ${VSCODE_USER} && echo "{\"java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"maven.terminal.useJavaHome\":true, \"maven.executable.path\":\"/opt/apache-maven-${MAVEN_VERSION}/bin/mvn\",\"spring-boot.ls.java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"files.exclude\":{\"**/.classpath\":true,\"**/.project\":true,\"**/.settings\":true,\"**/.factorypath\":true},\"redhat.telemetry.enabled\":false}" | jq . > ${VSCODE_USER}/settings.json
 RUN echo 'for f in /etc/profile.d/*.sh;do source $f;done' | sudo tee -a /home/coder/.bashrc > /dev/null

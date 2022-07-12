@@ -60,7 +60,7 @@ kubectl apply -f demo/developer-env-demo2.yaml
 
 ```
 tanzu package repository add making-pkg \
-  --url ghcr.io/making/pkg-repo:0.0.4 \
+  --url ghcr.io/making/pkg-repo:0.0.6 \
   --namespace developer-env
 ```
 
@@ -148,7 +148,7 @@ stringData:
 ### How to publish an imgpkg bundle
 
 ```
-VERSION=0.0.4
+VERSION=0.0.11
 docker build -t ghcr.io/making/code-server . 
 docker push ghcr.io/making/code-server
 kbld -f config/code-server.yaml --imgpkg-lock-output config/.imgpkg/images.yml
@@ -161,7 +161,7 @@ imgpkg push -b ghcr.io/making/code-server-bundle:${VERSION} -f config
 ytt -f config/vaules.yaml --data-values-schema-inspect -o openapi-v3 > /tmp/schema-openapi.yml
 ytt -f package-template.yml  --data-value-file openapi=/tmp/schema-openapi.yml -v version=${VERSION} > pkg-repo/packages/code-server.pkg.maki.lol/${VERSION}.yml
 kbld -f pkg-repo/packages --imgpkg-lock-output pkg-repo/.imgpkg/images.yml
-imgpkg push -b ghcr.io/making/pkg-repo:${VERSION} -f pkg-repo
+imgpkg push -b ghcr.io/making/code-server-repo:${VERSION} -f pkg-repo
 ```
 
 Update `demo/*.yaml` and `README.md`
