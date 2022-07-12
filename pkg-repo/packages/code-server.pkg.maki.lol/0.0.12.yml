@@ -1,10 +1,10 @@
 apiVersion: data.packaging.carvel.dev/v1alpha1
 kind: Package
 metadata:
-  name: code-server.pkg.maki.lol.0.0.11
+  name: code-server.pkg.maki.lol.0.0.12
 spec:
   refName: code-server.pkg.maki.lol
-  version: 0.0.11
+  version: 0.0.12
   releaseNotes: |
     Initial release of code server
   valuesSchema:
@@ -28,7 +28,7 @@ spec:
             external_url_format:
               type: string
               description: External URL format
-              default: https://code-server-{}.localhost.ik.am
+              default: https://code-server-{}.vcap.me
             storage_size:
               type: string
               description: Storage Size
@@ -45,6 +45,11 @@ spec:
               type: string
               nullable: true
               description: Explicit Ingress class name
+              default: null
+            clusterissuer:
+              type: string
+              nullable: true
+              description: ClusterIssuer name to generate the code server's certificate
               default: null
         resources:
           type: object
@@ -78,7 +83,7 @@ spec:
     spec:
       fetch:
       - imgpkgBundle:
-          image: ghcr.io/making/code-server-bundle:0.0.11
+          image: ghcr.io/making/code-server-bundle:0.0.12
       template:
       - ytt: {}
       - kbld:

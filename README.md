@@ -60,7 +60,7 @@ kubectl apply -f demo/developer-env-demo2.yaml
 
 ```
 tanzu package repository add code-server-repo \
-  --url ghcr.io/making/code-server-repo:0.0.11 \
+  --url ghcr.io/making/code-server-repo:0.0.12 \
   --namespace developer-env
 ```
 
@@ -68,22 +68,23 @@ tanzu package repository add code-server-repo \
 $ tanzu package available list -n developer-env
 - Retrieving available packages... 
   NAME                      DISPLAY-NAME  SHORT-DESCRIPTION       LATEST-VERSION  
-  code-server.pkg.maki.lol  Code Server   VS Code in the browser  0.0.11 
+  code-server.pkg.maki.lol  Code Server   VS Code in the browser  0.0.12  
 
-$ tanzu package available get code-server.pkg.maki.lol/0.0.11 --values-schema -n developer-env
-| Retrieving package details for code-server.pkg.maki.lol/0.0.11... 
-  KEY                              DEFAULT                                 TYPE     DESCRIPTION                                                          
-  code_server.storage_size         10Gi                                    string   Storage Size                                                         
-  code_server.clean                false                                   boolean  Whether to clean extension directory etc.                            
-  code_server.create_namespace     true                                    boolean  Whether to create the namespace                                      
-  code_server.external_url_format  https://code-server-{}.localhost.ik.am  string   External URL format                                                  
-  code_server.ingress_class        <nil>                                   string   Explicit Ingress class name                                          
-  namespace                        demo                                    string   Namespace to install the code server                                 
-  resources.limits.cpu             2000m                                   string   Limits describes the maximum amount of cpu resources allowed.        
-  resources.limits.memory          4Gi                                     string   Limits describes the maximum amount of memory resources allowed.     
-  resources.requests.cpu           1000m                                   string   Requests describes the minimum amount of cpu resources required.     
-  resources.requests.memory        2Gi                                     string   Requests describes the minimum amount of memory resources required.  
-  suffix                           <nil>                                   string   Suffix of the namespace
+$ tanzu package available get code-server.pkg.maki.lol/0.0.12 --values-schema -n developer-env
+| Retrieving package details for code-server.pkg.maki.lol/0.0.12... 
+  KEY                              DEFAULT                         TYPE     DESCRIPTION                                                          
+  code_server.external_url_format  https://code-server-{}.vcap.me  string   External URL format                                                  
+  code_server.ingress_class        <nil>                           string   Explicit Ingress class name                                          
+  code_server.storage_size         10Gi                            string   Storage Size                                                         
+  code_server.clean                false                           boolean  Whether to clean extension directory etc.                            
+  code_server.clusterissuer        <nil>                           string   ClusterIssuer name to generate the code server's certificate         
+  code_server.create_namespace     true                            boolean  Whether to create the namespace                                      
+  namespace                        demo                            string   Namespace to install the code server                                 
+  resources.limits.memory          4Gi                             string   Limits describes the maximum amount of memory resources allowed.     
+  resources.limits.cpu             2000m                           string   Limits describes the maximum amount of cpu resources allowed.        
+  resources.requests.memory        2Gi                             string   Requests describes the minimum amount of memory resources required.  
+  resources.requests.cpu           1000m                           string   Requests describes the minimum amount of cpu resources required.     
+  suffix                           <nil>                           string   Suffix of the namespace
 ```
 
 ```
@@ -91,23 +92,23 @@ cat <<EOF > values-demo1.yaml
 namespace: developer-env
 suffix: demo1
 EOF
-tanzu package install code-server-demo1 -p code-server.pkg.maki.lol -v 0.0.11 --values-file values-demo1.yaml -n developer-env
+tanzu package install code-server-demo1 -p code-server.pkg.maki.lol -v 0.0.12 --values-file values-demo1.yaml -n developer-env
 
 
 cat <<EOF > values-demo2.yaml
 namespace: developer-env
 suffix: demo2
 EOF
-tanzu package install code-server-demo2 -p code-server.pkg.maki.lol -v 0.0.11 --values-file values-demo2.yaml -n developer-env
+tanzu package install code-server-demo2 -p code-server.pkg.maki.lol -v 0.0.12 --values-file values-demo2.yaml -n developer-env
 ```
 
 ### Verify installation
 
 ```
 $ kubectl get ingress -A                    
-NAMESPACE             NAME          CLASS    HOSTS                               ADDRESS          PORTS     AGE
-developer-env-demo1   code-server   <none>   code-server-demo1.localhost.ik.am   *******          80, 443   8m46s
-developer-env-demo2   code-server   <none>   code-server-demo2.localhost.ik.am   *******          80, 443   4m22s
+NAMESPACE             NAME          CLASS    HOSTS                       ADDRESS          PORTS     AGE
+developer-env-demo1   code-server   <none>   code-server-demo1.vcap.me   *******          80, 443   8m46s
+developer-env-demo2   code-server   <none>   code-server-demo2.vcap.me   *******          80, 443   4m22s
 ```
 
 ```
@@ -118,8 +119,8 @@ k1rhx2sflv9oohzhaemubdoie6emiuao65kqd962
 ```
 
 Go to 
-* https://code-server-demo1.localhost.ik.am for demo1
-* https://code-server-demo2.localhost.ik.am for demo2
+* https://code-server-demo1.vcap.me for demo1
+* https://code-server-demo2.vcap.me for demo2
 
 
 You can install Tanzu VSCode Extensions using runnning `install-tanzu-vscode-extension.sh` on the home directory. You will be prompted for the TanzuNet API Token and the target TAP version.
@@ -156,7 +157,7 @@ stringData:
 ### How to publish an imgpkg bundle
 
 ```
-VERSION=0.0.11
+VERSION=0.0.12
 docker build -t ghcr.io/making/code-server . 
 docker push ghcr.io/making/code-server
 kbld -f config/code-server.yaml --imgpkg-lock-output config/.imgpkg/images.yml

@@ -7,7 +7,7 @@ namespace: demo
 suffix: ""
 code_server:
   #@schema/desc "External URL format"
-  external_url_format: https://code-server-{}.localhost.ik.am
+  external_url_format: https://code-server-{}.vcap.me
   #@schema/desc "Storage Size"
   storage_size: 10Gi
   #@schema/desc "Whether to create the namespace"
@@ -17,6 +17,9 @@ code_server:
   #@schema/desc "Explicit Ingress class name"
   #@schema/nullable
   ingress_class: ""
+  #@schema/desc "ClusterIssuer name to generate the code server's certificate"
+  #@schema/nullable
+  clusterissuer: ""
 resources:
   limits:
     #@schema/desc "Limits describes the maximum amount of cpu resources allowed."
