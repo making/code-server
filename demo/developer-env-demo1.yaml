@@ -8,7 +8,7 @@ spec:
   packageRef:
     refName: code-server.pkg.maki.lol
     versionSelection:
-      constraints: 0.0.11
+      constraints: 0.0.12
   values:
   - secretRef:
       name: developer-env-demo1-values
