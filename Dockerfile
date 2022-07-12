@@ -1,17 +1,18 @@
 FROM codercom/code-server
 
 # Misc
-RUN sudo apt-get update && sudo apt-get install --no-install-recommends -y gnupg2 curl
 RUN sudo apt-get update && sudo apt-get install --no-install-recommends -y \
     jq \
+    gnupg2 \
+    curl \
     unzip \
     libarchive-tools \
     wget \
+    bash-completion \
     dnsutils \
     netcat \
     telnet \
     postgresql-client \
-    mosquitto-clients \
     && sudo rm -rf /var/lib/apt/lists/*
 
 # Visual Studio Code Extentions
@@ -31,11 +32,6 @@ RUN code-server --install-extension adashen.vscode-tomcat
 RUN code-server --install-extension dgileadi.java-decompiler
 RUN code-server --install-extension gabrielbb.vscode-lombok
 
-# MongoDB
-ENV MONGODB_VERSION=5.0.9
-RUN wget -q https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-amd64/mongodb-org-shell_${MONGODB_VERSION}_amd64.deb && \
-    sudo dpkg -i mongodb-org-shell_${MONGODB_VERSION}_amd64.deb && \
-    rm -f mongodb-org-shell_${MONGODB_VERSION}_amd64.deb
 
 # Liberica JDK
 RUN wget -q -O OpenJDK.tar.gz https://download.bell-sw.com/java/17.0.3.1+2/bellsoft-jdk17.0.3.1+2-linux-amd64.tar.gz && \
@@ -129,16 +125,32 @@ RUN wget -q -O kwt https://github.com/vmware-tanzu/carvel-kwt/releases/download/
     sudo install kwt /usr/local/bin/ && \
     rm -f kwt*
 
-# SCDF Shell
-ENV SCDF_VERSION 2.9.4
-RUN wget -q https://repo.spring.io/release/org/springframework/cloud/spring-cloud-dataflow-shell/${SCDF_VERSION}/spring-cloud-dataflow-shell-${SCDF_VERSION}.jar && \
-    sudo mv spring-cloud-dataflow-shell-${SCDF_VERSION}.jar /opt/
+# kp
+ENV KP_VERSION 0.6.0
+RUN wget -q -O kp https://github.com/vmware-tanzu/kpack-cli/releases/download/v${KP_VERSION}/kp-linux-${KP_VERSION} && \
+    sudo install kp /usr/local/bin/ && \
+    rm -f kp
 
-# WebSocat
-ENV WEBSOCAT_VERSION=1.10.0
-RUN wget -q -O websocat https://github.com/vi/websocat/releases/download/v${WEBSOCAT_VERSION}/websocat.x86_64-unknown-linux-musl && \
-    sudo install websocat /usr/local/bin/ && \
-    rm -f websocat*
+# pinniped
+ENV PINNIPED_VERSION 0.18.0
+RUN wget -q -O pinniped https://get.pinniped.dev/v${PINNIPED_VERSION}/pinniped-cli-linux-amd64 && \
+    sudo install pinniped /usr/local/bin/ && \
+    rm -f pinniped
+
+# krew
+ENV KREW_VERSION 0.4.3
+RUN wget -q https://github.com/kubernetes-sigs/krew/releases/download/v${KREW_VERSION}/krew-linux_amd64.tar.gz && \
+    tar xzf krew-linux_amd64.tar.gz && \
+    ./krew-linux_amd64 install krew && \
+    rm -rf krew* && \
+    echo "export PATH=\"\${KREW_ROOT:-\$HOME/.krew}/bin:\$PATH\"" | sudo tee -a /home/coder/.bashrc > /dev/null
+
+# Tilt
+ENV TILT_VERSION=0.30.4
+RUN wget -q -O tilt.tar.gz https://github.com/tilt-dev/tilt/releases/download/v${TILT_VERSION}/tilt.${TILT_VERSION}.linux.x86_64.tar.gz && \
+    tar xzf tilt.tar.gz && \
+    sudo install tilt /usr/local/bin/ && \
+    rm -rf tilt*
 
 # Stern
 ENV STERN_VERSION 1.21.0
@@ -153,16 +165,67 @@ RUN wget -q -O pivnet https://github.com/pivotal-cf/pivnet-cli/releases/download
     sudo install pivnet /usr/local/bin/ && \
     rm -f pivnet*
 
+# Docker
+ENV DOCKER_VERSION 20.10.17
+RUN wget -q -O docker.tar.gz https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz && \
+    tar xzf docker.tar.gz && \
+    sudo install docker/docker /usr/local/bin/ && \
+    rm -rf docker*
+
+# SCDF Shell
+ENV SCDF_VERSION 2.9.4
+RUN wget -q https://repo.spring.io/release/org/springframework/cloud/spring-cloud-dataflow-shell/${SCDF_VERSION}/spring-cloud-dataflow-shell-${SCDF_VERSION}.jar && \
+    sudo mv spring-cloud-dataflow-shell-${SCDF_VERSION}.jar /opt/
+
+# WebSocat
+ENV WEBSOCAT_VERSION=1.10.0
+RUN wget -q -O websocat https://github.com/vi/websocat/releases/download/v${WEBSOCAT_VERSION}/websocat.x86_64-unknown-linux-musl && \
+    sudo install websocat /usr/local/bin/ && \
+    rm -f websocat*
+
+# MongoDB
+ENV MONGODB_VERSION=5.0.9
+RUN wget -q https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-amd64/mongodb-org-shell_${MONGODB_VERSION}_amd64.deb && \
+    sudo dpkg -i mongodb-org-shell_${MONGODB_VERSION}_amd64.deb && \
+    rm -f mongodb-org-shell_${MONGODB_VERSION}_amd64.deb
+
 # AWS
 RUN curl -s "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
     sudo ./aws/install && \
-    rm -rf aws
+    rm -rf aws*
 
 # AZURE
 RUN wget -q -O az.deb https://packages.microsoft.com/repos/azure-cli/pool/main/a/azure-cli/azure-cli_2.38.0-1~focal_all.deb && \
     sudo dpkg -i az.deb && \
     rm -f az.deb
+
+# gcloud
+RUN wget -q -O google-cloud-cli.deb https://packages.cloud.google.com/apt/pool/google-cloud-cli_392.0.0-0_all_dd9f193ae0737e536c22eedac754775a35ff7e0959d99f8c7860253cb0782c22.deb && \
+    sudo dpkg -i google-cloud-cli.deb && \
+    rm -f google-cloud-cli.deb
+
+RUN /home/coder/.krew/bin/kubectl-krew install tree && \
+    /home/coder/.krew/bin/kubectl-krew install neat
+
+RUN wget -q https://github.com/jonmosco/kube-ps1/raw/master/kube-ps1.sh && \
+    sudo mv kube-ps1.sh /opt/
+
+RUN kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null && \
+    helm completion bash | sudo tee /etc/bash_completion.d/helm > /dev/null && \
+    tanzu completion bash | sudo tee /etc/bash_completion.d/tanzu > /dev/null && \
+    kp completion bash | sudo tee /etc/bash_completion.d/kp > /dev/null && \
+    ytt completion bash | sudo tee /etc/bash_completion.d/ytt > /dev/null && \
+    kapp completion bash | grep -v Succeeded | sudo tee /etc/bash_completion.d/kapp > /dev/null && \
+    imgpkg completion bash | grep -v Succeeded | sudo tee /etc/bash_completion.d/imgpkg > /dev/null && \
+    kctrl completion bash | grep -v Succeeded | sudo tee /etc/bash_completion.d/kctrl > /dev/null && \
+    stern --completion bash | sudo tee /etc/bash_completion.d/stern > /dev/null && \
+    tilt completion bash | sudo tee /etc/bash_completion.d/tilt > /dev/null && \
+    pinniped completion bash | sudo tee /etc/bash_completion.d/pinniped > /dev/null
+
+RUN rm -f LICENSE README.md
+
+COPY install-tanzu-vscode-extension.sh /home/coder/
 
 RUN mkdir -p ${VSCODE_USER} && echo "{\"java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"maven.terminal.useJavaHome\":true, \"maven.executable.path\":\"/opt/apache-maven-${MAVEN_VERSION}/bin/mvn\",\"spring-boot.ls.java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"files.exclude\":{\"**/.classpath\":true,\"**/.project\":true,\"**/.settings\":true,\"**/.factorypath\":true},\"redhat.telemetry.enabled\":false}" | jq . > ${VSCODE_USER}/settings.json
 RUN echo 'for f in /etc/profile.d/*.sh;do source $f;done' | sudo tee -a /home/coder/.bashrc > /dev/null
