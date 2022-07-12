@@ -59,8 +59,8 @@ kubectl apply -f demo/developer-env-demo2.yaml
 #### Install via tanzu cli
 
 ```
-tanzu package repository add making-pkg \
-  --url ghcr.io/making/pkg-repo:0.0.6 \
+tanzu package repository add code-server-repo \
+  --url ghcr.io/making/code-server-repo:0.0.11 \
   --namespace developer-env
 ```
 
@@ -68,10 +68,10 @@ tanzu package repository add making-pkg \
 $ tanzu package available list -n developer-env
 - Retrieving available packages... 
   NAME                      DISPLAY-NAME  SHORT-DESCRIPTION       LATEST-VERSION  
-  code-server.pkg.maki.lol  Code Server   VS Code in the browser  0.0.4 
+  code-server.pkg.maki.lol  Code Server   VS Code in the browser  0.0.11 
 
-$ tanzu package available get code-server.pkg.maki.lol/0.0.4 --values-schema -n developer-env
-| Retrieving package details for code-server.pkg.maki.lol/0.0.4... 
+$ tanzu package available get code-server.pkg.maki.lol/0.0.11 --values-schema -n developer-env
+| Retrieving package details for code-server.pkg.maki.lol/0.0.11... 
   KEY                              DEFAULT                                 TYPE     DESCRIPTION                                                          
   code_server.storage_size         10Gi                                    string   Storage Size                                                         
   code_server.clean                false                                   boolean  Whether to clean extension directory etc.                            
@@ -91,14 +91,14 @@ cat <<EOF > values-demo1.yaml
 namespace: developer-env
 suffix: demo1
 EOF
-tanzu package install code-server-demo1 -p code-server.pkg.maki.lol -v 0.0.4 --values-file values-demo1.yaml -n developer-env
+tanzu package install code-server-demo1 -p code-server.pkg.maki.lol -v 0.0.11 --values-file values-demo1.yaml -n developer-env
 
 
 cat <<EOF > values-demo2.yaml
 namespace: developer-env
 suffix: demo2
 EOF
-tanzu package install code-server-demo2 -p code-server.pkg.maki.lol -v 0.0.4 --values-file values-demo2.yaml -n developer-env
+tanzu package install code-server-demo2 -p code-server.pkg.maki.lol -v 0.0.11 --values-file values-demo2.yaml -n developer-env
 ```
 
 ### Verify installation
