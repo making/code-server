@@ -147,20 +147,29 @@ spec:
         #@yaml/text-templated-strings
         - |
           (@ if data.values.code_server.clean: -@)
-          rm -rf /var/coder/.local/share/code-server/extensions
-          rm -f /var/coder/.local/share/code-server/User/settings.json
           rm -f /var/coder/.bashrc
+          rm -rf /var/coder/.config
+          rm -rf /var/coder/.local/share          
+          rm -rf /var/coder/.krew
+          rm -f /var/coder/install-tanzu-vscode-extension.sh
           (@- end @)
-          if [ ! -d /var/coder/.local/share/code-server/extensions ]; then
-            mkdir -p /var/coder/.local/share/code-server
-            mv /home/coder/.local/share/code-server/extensions /var/coder/.local/share/code-server/
-          fi
-          if [ ! -f /var/coder/.local/share/code-server/User/settings.json ]; then
-            mkdir -p /var/coder/.local/share/code-server/User
-            cp /home/coder/.local/share/code-server/User/settings.json /var/coder/.local/share/code-server/User/
-          fi
           if [ ! -f /var/coder/.bashrc ]; then
             cp /home/coder/.bashrc /var/coder/
+          fi
+          if [ ! -f /var/coder/install-tanzu-vscode-extension.sh ]; then
+            cp /home/coder/install-tanzu-vscode-extension.sh /var/coder/
+          fi
+          if [ ! -d /var/coder/.local/share ]; then
+            mkdir -p /var/coder/.local/share
+            mv /home/coder/.local/share/* /var/coder/.local/share/
+          fi
+          if [ ! -d /var/coder/.config ]; then
+            mkdir -p /var/coder/.config
+            mv /home/coder/.config/* /var/coder/.config/
+          fi
+          if [ ! -d /var/coder/.krew ]; then
+            mkdir -p /var/coder/.krew
+            mv /home/coder/.krew/* /var/coder/.krew/
           fi
           rm -rf /var/coder/lost+found
         securityContext:

@@ -104,10 +104,10 @@ tanzu package install code-server-demo2 -p code-server.pkg.maki.lol -v 0.0.11 --
 ### Verify installation
 
 ```
-$ kubectl get httpproxy -A
-NAMESPACE             NAME          FQDN                                TLS SECRET        STATUS   STATUS DESCRIPTION
-developer-env-demo1   code-server   code-server-demo1.localhost.ik.am   code-server-tls   valid    Valid HTTPProxy
-developer-env-demo2   code-server   code-server-demo2.localhost.ik.am   code-server-tls   valid    Valid HTTPProxy
+$ kubectl get ingress -A                    
+NAMESPACE             NAME          CLASS    HOSTS                               ADDRESS          PORTS     AGE
+developer-env-demo1   code-server   <none>   code-server-demo1.localhost.ik.am   *******          80, 443   8m46s
+developer-env-demo2   code-server   <none>   code-server-demo2.localhost.ik.am   *******          80, 443   4m22s
 ```
 
 ```
@@ -120,6 +120,14 @@ k1rhx2sflv9oohzhaemubdoie6emiuao65kqd962
 Go to 
 * https://code-server-demo1.localhost.ik.am for demo1
 * https://code-server-demo2.localhost.ik.am for demo2
+
+
+You can install Tanzu VSCode Extensions using runnning `install-tanzu-vscode-extension.sh` on the home directory. You will be prompted for the TanzuNet API Token and the target TAP version.
+
+Inner Loop Development on the VS Code Server is available.
+
+<img width="1024" alt="image" src="https://user-images.githubusercontent.com/106908/178522858-d6d2446b-286e-40b8-abdb-1cc9261352ea.png">
+
 
 ## How to configure values
 
