@@ -60,7 +60,7 @@ kubectl apply -f demo/developer-env-demo2.yaml
 
 ```
 tanzu package repository add code-server-repo \
-  --url ghcr.io/making/code-server-repo:0.0.12 \
+  --url ghcr.io/making/code-server-repo:0.1.0 \
   --namespace developer-env
 ```
 
@@ -68,10 +68,10 @@ tanzu package repository add code-server-repo \
 $ tanzu package available list -n developer-env
 - Retrieving available packages... 
   NAME                      DISPLAY-NAME  SHORT-DESCRIPTION       LATEST-VERSION  
-  code-server.pkg.maki.lol  Code Server   VS Code in the browser  0.0.12  
+  code-server.pkg.maki.lol  Code Server   VS Code in the browser  0.1.0  
 
-$ tanzu package available get code-server.pkg.maki.lol/0.0.12 --values-schema -n developer-env
-| Retrieving package details for code-server.pkg.maki.lol/0.0.12... 
+$ tanzu package available get code-server.pkg.maki.lol/0.1.0 --values-schema -n developer-env
+| Retrieving package details for code-server.pkg.maki.lol/0.1.0... 
   KEY                              DEFAULT                         TYPE     DESCRIPTION                                                          
   code_server.external_url_format  https://code-server-{}.vcap.me  string   External URL format                                                  
   code_server.ingress_class        <nil>                           string   Explicit Ingress class name                                          
@@ -92,14 +92,14 @@ cat <<EOF > values-demo1.yaml
 namespace: developer-env
 suffix: demo1
 EOF
-tanzu package install code-server-demo1 -p code-server.pkg.maki.lol -v 0.0.12 --values-file values-demo1.yaml -n developer-env
+tanzu package install code-server-demo1 -p code-server.pkg.maki.lol -v 0.1.0 --values-file values-demo1.yaml -n developer-env
 
 
 cat <<EOF > values-demo2.yaml
 namespace: developer-env
 suffix: demo2
 EOF
-tanzu package install code-server-demo2 -p code-server.pkg.maki.lol -v 0.0.12 --values-file values-demo2.yaml -n developer-env
+tanzu package install code-server-demo2 -p code-server.pkg.maki.lol -v 0.1.0 --values-file values-demo2.yaml -n developer-env
 ```
 
 ### Verify installation
@@ -123,7 +123,7 @@ Go to
 * https://code-server-demo2.vcap.me for demo2
 
 
-You can install Tanzu VSCode Extensions using runnning `install-tanzu-vscode-extension.sh` on the home directory. You will be prompted for the TanzuNet API Token and the target TAP version.
+You can install Tanzu VSCode Extensions using runnning `install-from-tanzunet.sh` on the home directory. You will be prompted for the TanzuNet API Token and the target TAP version.
 
 Inner Loop Development on the VS Code Server is available.
 
@@ -148,16 +148,17 @@ stringData:
     namespace: developer-env
     suffix: demo1
     code_server:
-      external_url_format: https://code-server-{}.default.example.com
-      ingress_class: contour-external
+      external_url_format: https://code-server-{}.code.example.com
 ```
+
+In the above example, `https://code-server-demo1.code.example.com` is the url
 
 ## Development Note
 
 ### How to publish an imgpkg bundle
 
 ```
-VERSION=0.0.12
+VERSION=0.1.0
 docker build -t ghcr.io/making/code-server . 
 docker push ghcr.io/making/code-server
 kbld -f config/code-server.yaml --imgpkg-lock-output config/.imgpkg/images.yml

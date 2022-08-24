@@ -1,10 +1,10 @@
 apiVersion: data.packaging.carvel.dev/v1alpha1
 kind: Package
 metadata:
-  name: code-server.pkg.maki.lol.0.0.12
+  name: code-server.pkg.maki.lol.0.1.0
 spec:
   refName: code-server.pkg.maki.lol
-  version: 0.0.12
+  version: 0.1.0
   releaseNotes: |
     Initial release of code server
   valuesSchema:
@@ -83,7 +83,7 @@ spec:
     spec:
       fetch:
       - imgpkgBundle:
-          image: ghcr.io/making/code-server-bundle:0.0.12
+          image: ghcr.io/making/code-server-bundle:0.1.0
       template:
       - ytt: {}
       - kbld:

@@ -30,11 +30,9 @@ RUN code-server --install-extension vscjava.vscode-spring-boot-dashboard
 RUN code-server --install-extension redhat.vscode-yaml
 RUN code-server --install-extension adashen.vscode-tomcat
 RUN code-server --install-extension dgileadi.java-decompiler
-RUN code-server --install-extension gabrielbb.vscode-lombok
-
 
 # Liberica JDK
-RUN wget -q -O OpenJDK.tar.gz https://download.bell-sw.com/java/17.0.3.1+2/bellsoft-jdk17.0.3.1+2-linux-amd64.tar.gz && \
+RUN wget -q -O OpenJDK.tar.gz https://download.bell-sw.com/java/17.0.4.1+1/bellsoft-jdk17.0.4.1+1-linux-amd64.tar.gz && \
     tar xzf OpenJDK.tar.gz && \
     sudo mv jdk* /opt/ && \
     rm -f OpenJDK.tar.gz && \
@@ -65,20 +63,20 @@ RUN chmod +x /etc/profile.d/01-maven.sh
 USER coder
 
 # Kubectl
-ENV KUBECTL_VERSION 1.23.8
+ENV KUBECTL_VERSION 1.23.10
 RUN wget -q -O kubectl "https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     sudo install kubectl /usr/local/bin/ && \
     rm -f kubectl*
 
 # HELM
-ENV HELM_VERSION 3.9.0
+ENV HELM_VERSION 3.9.3
 RUN wget -q -O helm.tgz "https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz" && \
     tar xzf helm.tgz && \
     sudo install linux-amd64/helm /usr/local/bin/ && \
     rm -rf linux-amd64 helm.tgz
 
 # Terraform
-ENV TERRAFORM_VERSION 1.2.4
+ENV TERRAFORM_VERSION 1.2.7
 RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip terraform.zip && \
     sudo install terraform /usr/local/bin/ && \
@@ -90,13 +88,13 @@ RUN wget -q -O yj https://github.com/sclevine/yj/releases/download/v5.1.0/yj-lin
     rm -f yj*
 
 # ytt
-ENV YTT_VERSION 0.41.1
+ENV YTT_VERSION 0.42.0
 RUN wget -q -O ytt https://github.com/vmware-tanzu/carvel-ytt/releases/download/v${YTT_VERSION}/ytt-linux-amd64 && \
     sudo install ytt /usr/local/bin/ && \
     rm -f ytt*
 
 # kapp
-ENV KAPP_VERSION 0.49.0
+ENV KAPP_VERSION 0.52.0
 RUN wget -q -O kapp https://github.com/vmware-tanzu/carvel-kapp/releases/download/v${KAPP_VERSION}/kapp-linux-amd64 && \
     sudo install kapp /usr/local/bin/ && \
     rm -f kapp*
@@ -108,13 +106,13 @@ RUN wget -q -O kbld https://github.com/vmware-tanzu/carvel-kbld/releases/downloa
     rm -f kbld*
 
 # imgpkg
-ENV IMGPKG_VERSION 0.29.0
+ENV IMGPKG_VERSION 0.31.0
 RUN wget -q -O imgpkg https://github.com/vmware-tanzu/carvel-imgpkg/releases/download/v${IMGPKG_VERSION}/imgpkg-linux-amd64 && \
     sudo install imgpkg /usr/local/bin/ && \
     rm -f imgpkg*
 
 # kctrl
-ENV KCTRL_VERSION 0.38.4
+ENV KCTRL_VERSION 0.40.0
 RUN wget -q -O kctrl https://github.com/vmware-tanzu/carvel-kapp-controller/releases/download/v${KCTRL_VERSION}/kctrl-linux-amd64 && \
     sudo install kctrl /usr/local/bin/ && \
     rm -f kctrl*
@@ -126,7 +124,7 @@ RUN wget -q -O kwt https://github.com/vmware-tanzu/carvel-kwt/releases/download/
     rm -f kwt*
 
 # kp
-ENV KP_VERSION 0.6.0
+ENV KP_VERSION 0.6.1
 RUN wget -q -O kp https://github.com/vmware-tanzu/kpack-cli/releases/download/v${KP_VERSION}/kp-linux-${KP_VERSION} && \
     sudo install kp /usr/local/bin/ && \
     rm -f kp
@@ -146,7 +144,7 @@ RUN wget -q https://github.com/kubernetes-sigs/krew/releases/download/v${KREW_VE
     echo "export PATH=\"\${KREW_ROOT:-\$HOME/.krew}/bin:\$PATH\"" | sudo tee -a /home/coder/.bashrc > /dev/null
 
 # Tilt
-ENV TILT_VERSION=0.30.4
+ENV TILT_VERSION=0.30.7
 RUN wget -q -O tilt.tar.gz https://github.com/tilt-dev/tilt/releases/download/v${TILT_VERSION}/tilt.${TILT_VERSION}.linux.x86_64.tar.gz && \
     tar xzf tilt.tar.gz && \
     sudo install tilt /usr/local/bin/ && \
@@ -158,6 +156,13 @@ RUN wget -q https://github.com/stern/stern/releases/download/v${STERN_VERSION}/s
     tar xzf stern_${STERN_VERSION}_linux_amd64.tar.gz && \
     sudo install stern /usr/local/bin/ && \
     rm -rf stern*
+
+# k9s
+ENV K9S_VERSION 0.26.3
+RUN wget -q https://github.com/derailed/k9s/releases/download/v${K9S_VERSION}/k9s_Linux_x86_64.tar.gz && \
+    tar zxf k9s_Linux_x86_64.tar.gz && \
+    sudo install k9s /usr/local/bin/ && \
+    rm -rf k9s* README.md
 
 # pivnet
 ENV PIVNET_VERSION 3.0.1
@@ -173,7 +178,7 @@ RUN wget -q -O docker.tar.gz https://download.docker.com/linux/static/stable/x86
     rm -rf docker*
 
 # SCDF Shell
-ENV SCDF_VERSION 2.9.4
+ENV SCDF_VERSION 2.9.5
 RUN wget -q https://repo.spring.io/release/org/springframework/cloud/spring-cloud-dataflow-shell/${SCDF_VERSION}/spring-cloud-dataflow-shell-${SCDF_VERSION}.jar && \
     sudo mv spring-cloud-dataflow-shell-${SCDF_VERSION}.jar /opt/
 
@@ -184,7 +189,7 @@ RUN wget -q -O websocat https://github.com/vi/websocat/releases/download/v${WEBS
     rm -f websocat*
 
 # MongoDB
-ENV MONGODB_VERSION=5.0.9
+ENV MONGODB_VERSION=5.0.11
 RUN wget -q https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-amd64/mongodb-org-shell_${MONGODB_VERSION}_amd64.deb && \
     sudo dpkg -i mongodb-org-shell_${MONGODB_VERSION}_amd64.deb && \
     rm -f mongodb-org-shell_${MONGODB_VERSION}_amd64.deb
@@ -196,12 +201,12 @@ RUN curl -s "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscl
     rm -rf aws*
 
 # AZURE
-RUN wget -q -O az.deb https://packages.microsoft.com/repos/azure-cli/pool/main/a/azure-cli/azure-cli_2.38.0-1~focal_all.deb && \
+RUN wget -q -O az.deb https://packages.microsoft.com/repos/azure-cli/pool/main/a/azure-cli/azure-cli_2.39.0-1~focal_all.deb && \
     sudo dpkg -i az.deb && \
     rm -f az.deb
 
 # gcloud
-RUN wget -q -O google-cloud-cli.deb https://packages.cloud.google.com/apt/pool/google-cloud-cli_392.0.0-0_all_dd9f193ae0737e536c22eedac754775a35ff7e0959d99f8c7860253cb0782c22.deb && \
+RUN wget -q -O google-cloud-cli.deb https://packages.cloud.google.com/apt/pool/google-cloud-cli_399.0.0-0_all_cc7f1cef3964d606b44fd37fdd1301c55204895fe547965a350d000364ddde8d.deb && \
     sudo dpkg -i google-cloud-cli.deb && \
     rm -f google-cloud-cli.deb
 
@@ -225,7 +230,10 @@ RUN kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/nul
 
 RUN rm -f LICENSE README.md
 
-COPY install-tanzu-vscode-extension.sh /home/coder/
+RUN mkdir /home/coder/.bin && \
+    echo "export PATH=\"\$HOME/.local/bin:\$PATH\"" | sudo tee -a /home/coder/.bashrc > /dev/null
+
+COPY install-from-tanzunet.sh /home/coder/
 
 RUN mkdir -p ${VSCODE_USER} && echo "{\"java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"maven.terminal.useJavaHome\":true, \"maven.executable.path\":\"/opt/apache-maven-${MAVEN_VERSION}/bin/mvn\",\"spring-boot.ls.java.home\":\"$(dirname /opt/jdk-*/bin/)\",\"files.exclude\":{\"**/.classpath\":true,\"**/.project\":true,\"**/.settings\":true,\"**/.factorypath\":true},\"redhat.telemetry.enabled\":false}" | jq . > ${VSCODE_USER}/settings.json
 RUN echo 'for f in /etc/profile.d/*.sh;do source $f;done' | sudo tee -a /home/coder/.bashrc > /dev/null

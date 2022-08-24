@@ -2,10 +2,10 @@
 apiVersion: imgpkg.carvel.dev/v1alpha1
 images:
 - annotations:
-    kbld.carvel.dev/id: ghcr.io/making/code-server-bundle:0.0.12
+    kbld.carvel.dev/id: ghcr.io/making/code-server-bundle:0.1.0
     kbld.carvel.dev/origins: |
       - resolved:
-          tag: 0.0.12
-          url: ghcr.io/making/code-server-bundle:0.0.12
-  image: ghcr.io/making/code-server-bundle@sha256:59375812e016863ec0335d68ca8254eda58999e02165712959d6662e949c5661
+          tag: 0.1.0
+          url: ghcr.io/making/code-server-bundle:0.1.0
+  image: ghcr.io/making/code-server-bundle@sha256:160110b4bad4ac52e111546b8ed89787803a680e2753c057cdea492cbf2c1817
 kind: ImagesLock

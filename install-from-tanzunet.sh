@@ -9,7 +9,7 @@ if [ ! -f $HOME/.pivnetrc ];then
 fi
 
 if [ "${TAP_VERSION}" == "" ]; then
-    DEFAULT_TAP_VERSION=1.2.0
+    DEFAULT_TAP_VERSION=1.2.1
     echo -n "TAP Vesion (default: ${DEFAULT_TAP_VERSION}): "
     read TAP_VERSION
     if [ "${TAP_VERSION}" == "" ]; then
@@ -25,3 +25,16 @@ for vsix in $(ls *.vsix);do
     /usr/lib/code-server/bin/code-server --install-extension ${vsix}
 done
 rm -f *.vsix
+
+set -x
+pivnet download-product-files --product-slug='tanzu-application-platform' --release-version=${TAP_VERSION} --glob='tanzu-framework-linux-amd64.tar'
+set +x
+
+export TANZU_CLI_NO_INIT=true
+tar xvf tanzu-framework-*-amd64.tar
+mkdir -p $HOME/.local/bin
+install cli/core/*/tanzu-core-*_amd64 $HOME/.local/bin/tanzu
+tanzu plugin install --local cli all
+
+rm -f tanzu-framework-linux-amd64.tar
+rm -rf cli
