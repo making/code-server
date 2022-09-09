@@ -1,0 +1,17 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+
+#@ if/end data.values.code_server.image :
+#@overlay/match by=overlay.subset({"kind":"Deployment","metadata":{"name":"code-server"}})
+---
+spec:
+  template:
+     spec:
+       initContainers:
+       #@overlay/match by="name"
+       - name: copy-files
+         image: #@ data.values.code_server.image
+       containers:
+       #@overlay/match by="name"
+       - name: code-server
+         image: #@ data.values.code_server.image

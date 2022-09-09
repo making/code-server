@@ -25,6 +25,11 @@ spec:
           type: object
           additionalProperties: false
           properties:
+            image:
+              type: string
+              nullable: true
+              description: image name to override the default code server image
+              default: null
             external_url_format:
               type: string
               description: External URL format
