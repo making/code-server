@@ -33,9 +33,9 @@ as prerequisites
 
 ```
 kubectl apply -f https://projectcontour.io/quickstart/contour.yaml
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml
-kubectl apply -f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/download/v0.30.0/release.yml
-kubectl apply -f https://github.com/vmware-tanzu/carvel-secretgen-controller/releases/download/v0.7.1/release.yml
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.9.1/cert-manager.yaml
+kubectl apply -f https://github.com/vmware-tanzu/carvel-kapp-controller/releases/download/v0.40.0/release.yml
+kubectl apply -f https://github.com/vmware-tanzu/carvel-secretgen-controller/releases/download/v0.10.3/release.yml
 ```
 
 ### Quick Install

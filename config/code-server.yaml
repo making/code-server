@@ -213,6 +213,10 @@ spec:
             secretKeyRef:
               name: code-server-password
               key: password
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
         resources: #@ data.values.resources
         ports:
         - containerPort: 3080
