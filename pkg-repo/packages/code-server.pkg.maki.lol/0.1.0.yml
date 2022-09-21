@@ -49,8 +49,20 @@ spec:
             ingress_class:
               type: string
               nullable: true
-              description: Explicit Ingress class name
+              description: Explicit Ingress class name in annotations (deprecated in favor of code_server.ingress.class_name)
               default: null
+            ingress:
+              type: object
+              additionalProperties: false
+              properties:
+                class_name:
+                  type: string
+                  description: Explicit Ingress class name in spec.ingressClassName
+                  default: ""
+                annotations:
+                  nullable: true
+                  description: Additional annotations on the ingress resource
+                  default: {}
             clusterissuer:
               type: string
               nullable: true

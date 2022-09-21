@@ -86,16 +86,26 @@ spec:
   secretName: code-server-tls
 #@ end
 ---
+#@ def merge_ingress_annotations(fixed_values):
+#@   annotations = {}
+#@   annotations.update(fixed_values)
+#@   if hasattr(data.values.code_server.ingress, "annotations"):
+#@     annotations.update(data.values.code_server.ingress.annotations)
+#@   end
+#@   if data.values.code_server.ingress_class:
+#@     annotations.update({"kubernetes.io/ingress.class": data.values.code_server.ingress_class})
+#@   end
+#@   return annotations
+#@ end
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: code-server
   namespace: #@ namespace
-  annotations:
-    #@ if/end data.values.code_server.ingress_class:
-    kubernetes.io/ingress.class: #@ data.values.code_server.ingress_class
-    projectcontour.io/websocket-routes: /
+  annotations: #@ merge_ingress_annotations({"projectcontour.io/websocket-routes": "/"})
 spec:
+  #@ if/end data.values.code_server.ingress.class_name:
+  ingressClassName: #@ data.values.code_server.ingress.class_name
   rules:
   - host: #@ hostname
     http:

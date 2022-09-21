@@ -17,9 +17,15 @@ code_server:
   create_namespace: true
   #@schema/desc "Whether to clean extension directory etc."
   clean: false
-  #@schema/desc "Explicit Ingress class name"
+  #@schema/desc "Explicit Ingress class name in annotations (deprecated in favor of code_server.ingress.class_name)"
   #@schema/nullable
   ingress_class: ""
+  ingress:
+    #@schema/desc "Explicit Ingress class name in spec.ingressClassName"
+    class_name: ""
+    #@schema/desc "Additional annotations on the ingress resource"
+    #@schema/type any=True
+    annotations: {}
   #@schema/desc "ClusterIssuer name to generate the code server's certificate"
   #@schema/nullable
   clusterissuer: ""
