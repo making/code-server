@@ -9,6 +9,10 @@ code_server:
   #@schema/desc "image name to override the default code server image"
   #@schema/nullable  
   image: ""
+  #@schema/desc "extra args to the code server"
+  #@schema/nullable
+  args:
+  - ""
   #@schema/desc "External URL format"
   external_url_format: https://code-server-{}.vcap.me
   #@schema/desc "Storage Size"

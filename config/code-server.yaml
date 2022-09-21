@@ -214,6 +214,8 @@ spec:
       containers:
       - name: code-server
         image: ghcr.io/making/code-server:latest
+        #@ if/end data.values.code_server.args:
+        args: #@ data.values.code_server.args
         imagePullPolicy: Always
         env:
         - name: PORT
