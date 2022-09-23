@@ -38,6 +38,14 @@ spec:
                 type: string
                 default: ""
               default: null
+            env:
+              type: array
+              description: extra env to the code server
+              items:
+                nullable: true
+                description: name and value of an environment variable
+                default: {}
+              default: []
             external_url_format:
               type: string
               description: External URL format
@@ -76,6 +84,14 @@ spec:
               nullable: true
               description: ClusterIssuer name to generate the code server's certificate
               default: null
+            auth_disabled:
+              type: boolean
+              description: Whether to disable authentication.
+              default: false
+            tls_disabled:
+              type: boolean
+              description: Whether to disable tls.
+              default: false
         resources:
           type: object
           additionalProperties: false

@@ -22,7 +22,16 @@ spec:
   selector:
     app: code-server
   type: ClusterIP
-#@ if not data.values.code_server.clusterissuer:
+#@ def create_certificate():
+#@   if data.values.code_server.clusterissuer:
+#@     return False
+#@   end
+#@   if data.values.code_server.tls_disabled:
+#@     return False
+#@   end
+#@   return True
+#@ end
+#@ if create_certificate() :
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer
@@ -70,7 +79,7 @@ spec:
     kind: Issuer
     name: code-server-ca-issuer
   secretName: code-server-tls
-#@ else:
+#@ elif data.values.code_server.clusterissuer:
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -117,10 +126,12 @@ spec:
               number: 3080
         path: /
         pathType: Prefix
+  #@ if not data.values.code_server.tls_disabled:
   tls:
   - hosts:
     - #@ hostname
     secretName: code-server-tls
+  #@ end
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -134,6 +145,7 @@ spec:
     requests:
       storage: #@ data.values.code_server.storage_size
 ---
+#@ if not data.values.code_server.auth_disabled:
 apiVersion: secretgen.k14s.io/v1alpha1
 kind: Password
 metadata:
@@ -144,6 +156,7 @@ spec:
     type: Opaque
     stringData:
       password: $(value)
+#@ end
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -214,21 +227,39 @@ spec:
       containers:
       - name: code-server
         image: ghcr.io/making/code-server:latest
-        #@ if/end data.values.code_server.args:
-        args: #@ data.values.code_server.args
+        #@ def build_args():
+        #@   args = data.values.code_server.args
+        #@   if data.values.code_server.auth_disabled:
+        #@     auth_none = ["--auth", "none"]
+        #@     if args:
+        #@       args.extend(auth_none)
+        #@     else:
+        #@       return auth_none
+        #@     end
+        #@   end
+        #@   return args
+        #@ end
+        #@ args = build_args()
+        #@ if/end args:
+        args: #@ args
         imagePullPolicy: Always
         env:
         - name: PORT
           value: "3080"
+        #@ if not data.values.code_server.auth_disabled:
         - name: PASSWORD
           valueFrom:
             secretKeyRef:
               name: code-server-password
               key: password
+        #@ end
         - name: NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+        #@ for i in range(len(data.values.code_server.env)):
+        - #@ data.values.code_server.env[i]
+        #@ end
         resources: #@ data.values.resources
         ports:
         - containerPort: 3080

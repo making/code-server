@@ -7,5 +7,5 @@ images:
       - resolved:
           tag: 0.1.0
           url: ghcr.io/making/code-server-bundle:0.1.0
-  image: ghcr.io/making/code-server-bundle@sha256:21300f471174aa1242cc9d90b1d85be91c71df9aa8a03440b458a3958757e5d0
+  image: ghcr.io/making/code-server-bundle@sha256:3412bec78622c2593dd706fcc74315bedfc7a54dd4e3372f9105b13731537d99
 kind: ImagesLock

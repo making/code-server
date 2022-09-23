@@ -13,6 +13,11 @@ code_server:
   #@schema/nullable
   args:
   - ""
+  #@schema/desc "extra env to the code server"
+  env:
+  #@schema/desc "name and value of an environment variable"
+  #@schema/type any=True
+  - {}
   #@schema/desc "External URL format"
   external_url_format: https://code-server-{}.vcap.me
   #@schema/desc "Storage Size"
@@ -33,6 +38,10 @@ code_server:
   #@schema/desc "ClusterIssuer name to generate the code server's certificate"
   #@schema/nullable
   clusterissuer: ""
+  #@schema/desc "Whether to disable authentication."
+  auth_disabled: false
+  #@schema/desc "Whether to disable tls."
+  tls_disabled: false
 resources:
   limits:
     #@schema/desc "Limits describes the maximum amount of cpu resources allowed."
