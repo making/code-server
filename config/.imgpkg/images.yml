@@ -7,12 +7,12 @@ images:
       - resolved:
           tag: latest
           url: ghcr.io/making/busybox:latest
-  image: ghcr.io/making/busybox@sha256:34efe68cca33507682b1673c851700ec66839ecf94d19b928176e20d20e02413
+  image: ghcr.io/making/busybox@sha256:bbb248c803ff97f51db3b37a2a604a6270cd2ee1ca9266120aeccb3b19ce80d2
 - annotations:
     kbld.carvel.dev/id: ghcr.io/making/code-server:latest
     kbld.carvel.dev/origins: |
       - resolved:
           tag: latest
           url: ghcr.io/making/code-server:latest
-  image: ghcr.io/making/code-server@sha256:3b671ae5a4e991e72eda10253b6edc945d52ec49b4a246f3034d4ab93457cee2
+  image: ghcr.io/making/code-server@sha256:8c26770c4ea8d3e95f4e1a61623fc58b11dfcf21bc9530b0b0d0343b469903ad
 kind: ImagesLock

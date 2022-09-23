@@ -93,6 +93,10 @@ spec:
               type: boolean
               description: Whether to disable tls.
               default: false
+            init_script:
+              type: string
+              description: Additional script inside initContainer
+              default: ""
         resources:
           type: object
           additionalProperties: false

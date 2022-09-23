@@ -79,19 +79,20 @@ $ tanzu package available get code-server.pkg.maki.lol/0.1.0 --values-schema -n 
   resources.requests.cpu           1000m                           string   Requests describes the minimum amount of cpu resources required.                                    
   resources.requests.memory        2Gi                             string   Requests describes the minimum amount of memory resources required.                                 
   suffix                           <nil>                           string   Suffix of the namespace                                                                             
-  code_server.tls_disabled         false                           boolean  Whether to disable tls.                                                                             
-  code_server.auth_disabled        false                           boolean  Whether to disable authentication.                                                                  
-  code_server.clean                false                           boolean  Whether to clean extension directory etc.                                                           
-  code_server.env                  []                              array    extra env to the code server                                                                        
-  code_server.external_url_format  https://code-server-{}.vcap.me  string   External URL format                                                                                 
-  code_server.image                <nil>                           string   image name to override the default code server image                                                
-  code_server.ingress.annotations  map[]                           <nil>    Additional annotations on the ingress resource                                                      
-  code_server.ingress.class_name                                   string   Explicit Ingress class name in spec.ingressClassName                                                
-  code_server.args                 <nil>                           array    extra args to the code server                                                                       
-  code_server.clusterissuer        <nil>                           string   ClusterIssuer name to generate the code server's certificate                                        
-  code_server.create_namespace     true                            boolean  Whether to create the namespace                                                                     
   code_server.ingress_class        <nil>                           string   Explicit Ingress class name in annotations (deprecated in favor of code_server.ingress.class_name)  
-  code_server.storage_size         10Gi                            string   Storage Size 
+  code_server.storage_size         10Gi                            string   Storage Size                                                                                        
+  code_server.args                 <nil>                           array    Extra args to the code server                                                                       
+  code_server.clean                false                           boolean  Whether to clean extension directory etc.                                                           
+  code_server.clusterissuer        <nil>                           string   ClusterIssuer name to generate the code server's certificate                                        
+  code_server.env                  []                              array    Extra env to the code server                                                                        
+  code_server.external_url_format  https://code-server-{}.vcap.me  string   External URL format                                                                                 
+  code_server.image                <nil>                           string   Image name to override the default code server image                                                
+  code_server.auth_disabled        false                           boolean  Whether to disable authentication.                                                                  
+  code_server.create_namespace     true                            boolean  Whether to create the namespace                                                                     
+  code_server.ingress.annotations  map[]                           <nil>    Additional annotations on the ingress resource                                                      
+  code_server.ingress.class_name   <nil>                           string   Explicit Ingress class name in spec.ingressClassName                                                
+  code_server.init_script                                          string   Additional script inside initContainer                                                              
+  code_server.tls_disabled         false                           boolean  Whether to disable tls. 
 ```
 
 ```

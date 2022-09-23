@@ -9,7 +9,7 @@ if [ ! -f $HOME/.pivnetrc ];then
 fi
 
 if [ "${TAP_VERSION}" == "" ]; then
-    DEFAULT_TAP_VERSION=1.2.1
+    DEFAULT_TAP_VERSION=1.2.2
     echo -n "TAP Vesion (default: ${DEFAULT_TAP_VERSION}): "
     read TAP_VERSION
     if [ "${TAP_VERSION}" == "" ]; then
@@ -34,7 +34,7 @@ export TANZU_CLI_NO_INIT=true
 tar xvf tanzu-framework-*-amd64.tar
 mkdir -p $HOME/.local/bin
 install cli/core/*/tanzu-core-*_amd64 $HOME/.local/bin/tanzu
-tanzu plugin install --local cli all
+$HOME/.local/bin/tanzu plugin install --local cli all
 
 rm -f tanzu-framework-linux-amd64.tar
 rm -rf cli

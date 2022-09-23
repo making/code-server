@@ -43,6 +43,8 @@ code_server:
   auth_disabled: false
   #@schema/desc "Whether to disable tls."
   tls_disabled: false
+  #@schema/desc "Additional script inside initContainer"
+  init_script: ""
 resources:
   limits:
     #@schema/desc "Limits describes the maximum amount of cpu resources allowed."

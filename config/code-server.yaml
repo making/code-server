@@ -188,23 +188,33 @@ spec:
           (@ if data.values.code_server.clean: -@)
           rm -f /var/coder/.bashrc
           rm -rf /var/coder/.config
-          rm -rf /var/coder/.local/share          
+          rm -rf /var/coder/.local
+          rm -rf /var/coder/.cache
           rm -rf /var/coder/.krew
           rm -f /var/coder/install-from-tanzunet.sh
           (@- end @)
+          
+          (@= data.values.code_server.init_script @)
+          
           if [ ! -f /var/coder/.bashrc ]; then
             cp /home/coder/.bashrc /var/coder/
           fi
           if [ ! -f /var/coder/install-from-tanzunet.sh ]; then
-            cp /home/coder/install-from-tanzunet.sh /var/coder/
+            if [ -f /home/coder/install-from-tanzunet.sh ]; then
+              cp /home/coder/install-from-tanzunet.sh /var/coder/
+            fi
           fi
-          if [ ! -d /var/coder/.local/share ]; then
-            mkdir -p /var/coder/.local/share
-            mv /home/coder/.local/share/* /var/coder/.local/share/
+          if [ ! -d /var/coder/.local ]; then
+            mkdir -p /var/coder/.local
+            mv /home/coder/.local/* /var/coder/.local/
           fi
           if [ ! -d /var/coder/.config ]; then
             mkdir -p /var/coder/.config
             mv /home/coder/.config/* /var/coder/.config/
+          fi
+          if [ ! -d /var/coder/.cache ]; then
+            mkdir -p /var/coder/.cache
+            mv /home/coder/.cache/* /var/coder/.cache/
           fi
           if [ ! -d /var/coder/.krew ]; then
             mkdir -p /var/coder/.krew
