@@ -72,19 +72,26 @@ $ tanzu package available list -n developer-env
 
 $ tanzu package available get code-server.pkg.maki.lol/0.1.0 --values-schema -n developer-env
 | Retrieving package details for code-server.pkg.maki.lol/0.1.0... 
-  KEY                              DEFAULT                         TYPE     DESCRIPTION                                                          
-  code_server.external_url_format  https://code-server-{}.vcap.me  string   External URL format                                                  
-  code_server.ingress_class        <nil>                           string   Explicit Ingress class name                                          
-  code_server.storage_size         10Gi                            string   Storage Size                                                         
-  code_server.clean                false                           boolean  Whether to clean extension directory etc.                            
-  code_server.clusterissuer        <nil>                           string   ClusterIssuer name to generate the code server's certificate         
-  code_server.create_namespace     true                            boolean  Whether to create the namespace                                      
-  namespace                        demo                            string   Namespace to install the code server                                 
-  resources.limits.memory          4Gi                             string   Limits describes the maximum amount of memory resources allowed.     
-  resources.limits.cpu             2000m                           string   Limits describes the maximum amount of cpu resources allowed.        
-  resources.requests.memory        2Gi                             string   Requests describes the minimum amount of memory resources required.  
-  resources.requests.cpu           1000m                           string   Requests describes the minimum amount of cpu resources required.     
-  suffix                           <nil>                           string   Suffix of the namespace
+  KEY                              DEFAULT                         TYPE     DESCRIPTION                                                                                         
+  namespace                        demo                            string   Namespace to install the code server                                                                
+  resources.limits.cpu             2000m                           string   Limits describes the maximum amount of cpu resources allowed.                                       
+  resources.limits.memory          4Gi                             string   Limits describes the maximum amount of memory resources allowed.                                    
+  resources.requests.cpu           1000m                           string   Requests describes the minimum amount of cpu resources required.                                    
+  resources.requests.memory        2Gi                             string   Requests describes the minimum amount of memory resources required.                                 
+  suffix                           <nil>                           string   Suffix of the namespace                                                                             
+  code_server.tls_disabled         false                           boolean  Whether to disable tls.                                                                             
+  code_server.auth_disabled        false                           boolean  Whether to disable authentication.                                                                  
+  code_server.clean                false                           boolean  Whether to clean extension directory etc.                                                           
+  code_server.env                  []                              array    extra env to the code server                                                                        
+  code_server.external_url_format  https://code-server-{}.vcap.me  string   External URL format                                                                                 
+  code_server.image                <nil>                           string   image name to override the default code server image                                                
+  code_server.ingress.annotations  map[]                           <nil>    Additional annotations on the ingress resource                                                      
+  code_server.ingress.class_name                                   string   Explicit Ingress class name in spec.ingressClassName                                                
+  code_server.args                 <nil>                           array    extra args to the code server                                                                       
+  code_server.clusterissuer        <nil>                           string   ClusterIssuer name to generate the code server's certificate                                        
+  code_server.create_namespace     true                            boolean  Whether to create the namespace                                                                     
+  code_server.ingress_class        <nil>                           string   Explicit Ingress class name in annotations (deprecated in favor of code_server.ingress.class_name)  
+  code_server.storage_size         10Gi                            string   Storage Size 
 ```
 
 ```

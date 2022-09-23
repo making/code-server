@@ -6,14 +6,14 @@ namespace: demo
 #@schema/nullable
 suffix: ""
 code_server:
-  #@schema/desc "image name to override the default code server image"
+  #@schema/desc "Image name to override the default code server image"
   #@schema/nullable  
   image: ""
-  #@schema/desc "extra args to the code server"
+  #@schema/desc "Extra args to the code server"
   #@schema/nullable
   args:
   - ""
-  #@schema/desc "extra env to the code server"
+  #@schema/desc "Extra env to the code server"
   env:
   #@schema/desc "name and value of an environment variable"
   #@schema/type any=True
@@ -31,6 +31,7 @@ code_server:
   ingress_class: ""
   ingress:
     #@schema/desc "Explicit Ingress class name in spec.ingressClassName"
+    #@schema/nullable
     class_name: ""
     #@schema/desc "Additional annotations on the ingress resource"
     #@schema/type any=True

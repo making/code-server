@@ -28,19 +28,19 @@ spec:
             image:
               type: string
               nullable: true
-              description: image name to override the default code server image
+              description: Image name to override the default code server image
               default: null
             args:
               type: array
               nullable: true
-              description: extra args to the code server
+              description: Extra args to the code server
               items:
                 type: string
                 default: ""
               default: null
             env:
               type: array
-              description: extra env to the code server
+              description: Extra env to the code server
               items:
                 nullable: true
                 description: name and value of an environment variable
@@ -73,8 +73,9 @@ spec:
               properties:
                 class_name:
                   type: string
+                  nullable: true
                   description: Explicit Ingress class name in spec.ingressClassName
-                  default: ""
+                  default: null
                 annotations:
                   nullable: true
                   description: Additional annotations on the ingress resource
