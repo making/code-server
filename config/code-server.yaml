@@ -26,7 +26,7 @@ spec:
 #@   if data.values.code_server.clusterissuer:
 #@     return False
 #@   end
-#@   if data.values.code_server.tls_disabled:
+#@   if data.values.code_server.ingress.tls_disabled:
 #@     return False
 #@   end
 #@   return True
@@ -126,7 +126,7 @@ spec:
               number: 3080
         path: /
         pathType: Prefix
-  #@ if not data.values.code_server.tls_disabled:
+  #@ if not data.values.code_server.ingress.tls_disabled:
   tls:
   - hosts:
     - #@ hostname

@@ -36,13 +36,13 @@ code_server:
     #@schema/desc "Additional annotations on the ingress resource"
     #@schema/type any=True
     annotations: {}
+    #@schema/desc "Whether to disable tls."
+    tls_disabled: false
   #@schema/desc "ClusterIssuer name to generate the code server's certificate"
   #@schema/nullable
   clusterissuer: ""
   #@schema/desc "Whether to disable authentication."
   auth_disabled: false
-  #@schema/desc "Whether to disable tls."
-  tls_disabled: false
   #@schema/desc "Additional script inside initContainer"
   init_script: ""
 resources:

@@ -80,6 +80,10 @@ spec:
                   nullable: true
                   description: Additional annotations on the ingress resource
                   default: {}
+                tls_disabled:
+                  type: boolean
+                  description: Whether to disable tls.
+                  default: false
             clusterissuer:
               type: string
               nullable: true
@@ -88,10 +92,6 @@ spec:
             auth_disabled:
               type: boolean
               description: Whether to disable authentication.
-              default: false
-            tls_disabled:
-              type: boolean
-              description: Whether to disable tls.
               default: false
             init_script:
               type: string
