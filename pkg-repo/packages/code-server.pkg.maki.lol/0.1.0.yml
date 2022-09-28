@@ -30,6 +30,14 @@ spec:
               nullable: true
               description: Image name to override the default code server image
               default: null
+            image_pull_secrets:
+              type: array
+              description: Image pull secrets for code server
+              items:
+                nullable: true
+                description: Image pull secret for code server
+                default: {}
+              default: []
             args:
               type: array
               nullable: true

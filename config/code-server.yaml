@@ -177,6 +177,8 @@ spec:
       labels:
         app: code-server
     spec:
+      #@ if/end len(data.values.code_server.image_pull_secrets) > 0 :
+      imagePullSecrets: #@ data.values.code_server.image_pull_secrets
       initContainers:
       - name: copy-files
         image: ghcr.io/making/code-server:latest

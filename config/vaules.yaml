@@ -9,6 +9,11 @@ code_server:
   #@schema/desc "Image name to override the default code server image"
   #@schema/nullable  
   image: ""
+  #@schema/desc "Image pull secrets for code server"
+  image_pull_secrets:
+  #@schema/desc "Image pull secret for code server"
+  #@schema/type any=True
+  - { }
   #@schema/desc "Extra args to the code server"
   #@schema/nullable
   args:
@@ -17,7 +22,7 @@ code_server:
   env:
   #@schema/desc "name and value of an environment variable"
   #@schema/type any=True
-  - {}
+  - { }
   #@schema/desc "External URL format"
   external_url_format: https://code-server-{}.vcap.me
   #@schema/desc "Storage Size"
@@ -35,7 +40,7 @@ code_server:
     class_name: ""
     #@schema/desc "Additional annotations on the ingress resource"
     #@schema/type any=True
-    annotations: {}
+    annotations: { }
     #@schema/desc "Whether to disable tls."
     tls_disabled: false
   #@schema/desc "ClusterIssuer name to generate the code server's certificate"
