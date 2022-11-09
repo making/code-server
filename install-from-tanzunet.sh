@@ -9,7 +9,7 @@ if [ ! -f $HOME/.pivnetrc ];then
 fi
 
 if [ "${TAP_VERSION}" == "" ]; then
-    DEFAULT_TAP_VERSION=1.2.2
+    DEFAULT_TAP_VERSION=1.3.0
     echo -n "TAP Vesion (default: ${DEFAULT_TAP_VERSION}): "
     read TAP_VERSION
     if [ "${TAP_VERSION}" == "" ]; then

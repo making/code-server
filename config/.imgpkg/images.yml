@@ -14,5 +14,5 @@ images:
       - resolved:
           tag: latest
           url: ghcr.io/making/code-server:latest
-  image: ghcr.io/making/code-server@sha256:8c26770c4ea8d3e95f4e1a61623fc58b11dfcf21bc9530b0b0d0343b469903ad
+  image: ghcr.io/making/code-server@sha256:e21b7dbfaf27b551e50f9b9cfc1056677c15729c0bf96393a9824a2fe2c90073
 kind: ImagesLock
